@@ -1,0 +1,36 @@
+{
+	"status": "success",
+	"appState": "applied",
+	"overallDownloadProgress": null,
+	"containers": [
+		{
+			"status": "Running",
+			"serviceName": "volume-keeper",
+			"appId": 1,
+			"imageId": 1,
+			"serviceId": 1,
+			"containerId": "1fa222aa3d69540a66a0d4eec7692237bab33d73cea20fd397c076c0fbbda16e",
+			"createdAt": "2022-04-28T17:35:22.426Z"
+		},
+		{
+			"status": "Running",
+			"serviceName": "test-service-2",
+			"appId": 1,
+			"imageId": 3,
+			"serviceId": 3,
+			"containerId": "b8efdd9f9a1a9e909c4ae6c0772ca69a464112f6b5ce1f94ab653383063a9fef",
+			"createdAt": "2022-04-26T18:34:16.215Z"
+		},
+		{
+			"status": "Running",
+			"serviceName": "test-service-1",
+			"appId": 1,
+			"imageId": 2,
+			"serviceId": 2,
+			"containerId": "80b1abb4e8cad899c2feb3242dba6930d0303d2ae0f8b366adb01f96c18553aa",
+			"createdAt": "2022-04-26T18:34:16.214Z"
+		}
+	],
+	"images": [],
+	"release": "localrelease"
+}

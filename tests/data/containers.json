@@ -1,0 +1,481 @@
+[
+	{
+		"Id": "b96317f6bc33c37f77a4e7af7a370026e8298c57b4c4574fe49d0a5220118e0f",
+		"Names": ["/hardcore_meitner"],
+		"Image": "4f8d0e799c4d",
+		"ImageID": "sha256:4f8d0e799c4d408cb17f149fb1e2b4d2c571895fbb1c4b56a48a085b3425dc73",
+		"Command": "/bin/sh -c 'while true; do sleep 3600; done'",
+		"Created": 1651167324,
+		"Ports": [],
+		"Labels": {},
+		"State": "running",
+		"Status": "Up 35 seconds",
+		"HostConfig": {
+			"NetworkMode": "default"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"bridge": {
+					"IPAMConfig": null,
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "689ea6ac8d85e9020c10e4bf21e3c8281cdec74112dc1638089a7530cccd7cc9",
+					"EndpointID": "c378bab39fbc79864282d02293013a5b46e90283e67a67d8c122d15285078123",
+					"Gateway": "10.114.101.1",
+					"IPAddress": "10.114.101.4",
+					"IPPrefixLen": 24,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:0a:72:65:04",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": []
+	},
+	{
+		"Id": "e3e83b075d22eba1095e0ff3060cdea814068da47ac780c0d1384a64cfd15a73",
+		"Names": ["/lucid_mcclintock"],
+		"Image": "c89e3832f537",
+		"ImageID": "sha256:c89e3832f537c52aa3833c9fc32941849117c2c34d12af21077ecc9c19f664cd",
+		"Command": "/bin/sh -c 'while true; do sleep 3600; done'",
+		"Created": 1651167324,
+		"Ports": [],
+		"Labels": {},
+		"State": "running",
+		"Status": "Up 35 seconds",
+		"HostConfig": {
+			"NetworkMode": "default"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"bridge": {
+					"IPAMConfig": null,
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "689ea6ac8d85e9020c10e4bf21e3c8281cdec74112dc1638089a7530cccd7cc9",
+					"EndpointID": "18a7682c316d796f8e54b6f14d5064a92a8e49678615c07077639f914b7c9306",
+					"Gateway": "10.114.101.1",
+					"IPAddress": "10.114.101.3",
+					"IPPrefixLen": 24,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:0a:72:65:03",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": []
+	},
+	{
+		"Id": "1fa222aa3d69540a66a0d4eec7692237bab33d73cea20fd397c076c0fbbda16e",
+		"Names": ["/volume-keeper_1_1_localrelease"],
+		"Image": "sha256:658aa9bf79c969731ec185710adfc81e491814aba278f34437170a146f43f029",
+		"ImageID": "sha256:658aa9bf79c969731ec185710adfc81e491814aba278f34437170a146f43f029",
+		"Command": "docker-entrypoint.sh dumb-init node /app/build/index.js",
+		"Created": 1651167322,
+		"Ports": [],
+		"Labels": {
+			"io.balena.app-id": "1",
+			"io.balena.features.balena-socket": "1",
+			"io.balena.features.supervisor-api": "1",
+			"io.balena.local.image": "1",
+			"io.balena.local.service": "volume-keeper",
+			"io.balena.service-id": "1",
+			"io.balena.service-name": "volume-keeper",
+			"io.balena.supervised": "true",
+			"io.resin.local.image": "1",
+			"io.resin.local.service": "volume-keeper"
+		},
+		"State": "running",
+		"Status": "Up 37 seconds",
+		"HostConfig": {
+			"NetworkMode": "1_default"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"1_default": {
+					"IPAMConfig": {},
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "e7cf179cf3bf1b6457855ec94b1a2f5c5b995832980539b36ab50429738ed958",
+					"EndpointID": "e6b907fa1ee4758122bf81a5a197aaa5ef8969325b2648c59b54446359747a2f",
+					"Gateway": "172.17.0.1",
+					"IPAddress": "172.17.0.3",
+					"IPPrefixLen": 16,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:ac:11:00:03",
+					"DriverOpts": null
+				},
+				"supervisor0": {
+					"IPAMConfig": {},
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "eac1b6f7756c16611ceec2bb74ed1d230846a54c3e4e09df85d8ddf13d61d905",
+					"EndpointID": "896781a06f9da66b24388f093166eadd49efa1734e9b518cb8bdc36040242cd3",
+					"Gateway": "10.114.104.1",
+					"IPAddress": "10.114.104.2",
+					"IPPrefixLen": 25,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:0a:72:68:02",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": [
+			{
+				"Type": "bind",
+				"Source": "/tmp/balena-supervisor/services/1/volume-keeper",
+				"Destination": "/tmp/balena",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/tmp/balena-supervisor/services/1/volume-keeper",
+				"Destination": "/tmp/resin",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/var/run/balena-engine.sock",
+				"Destination": "/var/run/balena-engine.sock",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/var/run/balena-engine.sock",
+				"Destination": "/var/run/balena.sock",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "volume",
+				"Name": "1_cache",
+				"Source": "/var/lib/docker/volumes/1_cache/_data",
+				"Destination": "/cache",
+				"Driver": "local",
+				"Mode": "z",
+				"RW": true,
+				"Propagation": ""
+			},
+			{
+				"Type": "bind",
+				"Source": "/var/run/balena-engine.sock",
+				"Destination": "/host/run/balena-engine.sock",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "volume",
+				"Name": "1_snapshots",
+				"Source": "/var/lib/docker/volumes/1_snapshots/_data",
+				"Destination": "/snapshots",
+				"Driver": "local",
+				"Mode": "z",
+				"RW": true,
+				"Propagation": ""
+			}
+		]
+	},
+	{
+		"Id": "b8efdd9f9a1a9e909c4ae6c0772ca69a464112f6b5ce1f94ab653383063a9fef",
+		"Names": ["/test-service-2_3_1_localrelease"],
+		"Image": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b",
+		"ImageID": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b",
+		"Command": "tail -f /dev/null",
+		"Created": 1650998056,
+		"Ports": [],
+		"Labels": {
+			"io.balena.app-id": "1",
+			"io.balena.service-id": "3",
+			"io.balena.service-name": "test-service-2",
+			"io.balena.supervised": "true"
+		},
+		"State": "running",
+		"Status": "Up 47 hours",
+		"HostConfig": {
+			"NetworkMode": "1_default"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"1_default": {
+					"IPAMConfig": {},
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "e7cf179cf3bf1b6457855ec94b1a2f5c5b995832980539b36ab50429738ed958",
+					"EndpointID": "e7a40f462ad940499819ce57f47d7ea1f7dcab9bb796abbb962825eb3e5a5c27",
+					"Gateway": "172.17.0.1",
+					"IPAddress": "172.17.0.2",
+					"IPPrefixLen": 16,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:ac:11:00:02",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": [
+			{
+				"Type": "bind",
+				"Source": "/tmp/balena-supervisor/services/1/test-service-2",
+				"Destination": "/tmp/resin",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "volume",
+				"Name": "1_test-data-1",
+				"Source": "/var/lib/docker/volumes/1_test-data-1/_data",
+				"Destination": "/data-1",
+				"Driver": "local",
+				"Mode": "z",
+				"RW": true,
+				"Propagation": ""
+			},
+			{
+				"Type": "volume",
+				"Name": "1_test-data-2",
+				"Source": "/var/lib/docker/volumes/1_test-data-2/_data",
+				"Destination": "/data-2",
+				"Driver": "local",
+				"Mode": "z",
+				"RW": true,
+				"Propagation": ""
+			},
+			{
+				"Type": "bind",
+				"Source": "/tmp/balena-supervisor/services/1/test-service-2",
+				"Destination": "/tmp/balena",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			}
+		]
+	},
+	{
+		"Id": "80b1abb4e8cad899c2feb3242dba6930d0303d2ae0f8b366adb01f96c18553aa",
+		"Names": ["/test-service-1_2_1_localrelease"],
+		"Image": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b",
+		"ImageID": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b",
+		"Command": "tail -f /dev/null",
+		"Created": 1650998056,
+		"Ports": [],
+		"Labels": {
+			"io.balena.app-id": "1",
+			"io.balena.service-id": "2",
+			"io.balena.service-name": "test-service-1",
+			"io.balena.supervised": "true"
+		},
+		"State": "running",
+		"Status": "Up 47 hours",
+		"HostConfig": {
+			"NetworkMode": "1_default"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"1_default": {
+					"IPAMConfig": {},
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "e7cf179cf3bf1b6457855ec94b1a2f5c5b995832980539b36ab50429738ed958",
+					"EndpointID": "d02d2ed2e4319571a812059e0ec972f872f07816ab592b625266dd01867842c8",
+					"Gateway": "172.17.0.1",
+					"IPAddress": "172.17.0.4",
+					"IPPrefixLen": 16,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:ac:11:00:04",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": [
+			{
+				"Type": "bind",
+				"Source": "/tmp/balena-supervisor/services/1/test-service-1",
+				"Destination": "/tmp/balena",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/tmp/balena-supervisor/services/1/test-service-1",
+				"Destination": "/tmp/resin",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "volume",
+				"Name": "1_test-data-1",
+				"Source": "/var/lib/docker/volumes/1_test-data-1/_data",
+				"Destination": "/data",
+				"Driver": "local",
+				"Mode": "z",
+				"RW": true,
+				"Propagation": ""
+			}
+		]
+	},
+	{
+		"Id": "200bc4085cb93a92e11830a15da3f10754d8aeea91ae8aaa1fa5355d995a37f8",
+		"Names": ["/friendly_poitras"],
+		"Image": "c28b4e722eb7",
+		"ImageID": "sha256:c28b4e722eb7786a5f60697caf6cbb3a1f6aed4329dfa44361b50c7621072693",
+		"Command": "/bin/sh -c 'while true; do sleep 3600; done'",
+		"Created": 1650992787,
+		"Ports": [],
+		"Labels": {},
+		"State": "running",
+		"Status": "Up 2 days",
+		"HostConfig": {
+			"NetworkMode": "default"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"bridge": {
+					"IPAMConfig": null,
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "689ea6ac8d85e9020c10e4bf21e3c8281cdec74112dc1638089a7530cccd7cc9",
+					"EndpointID": "7c48777d4edb9f42b5444470a634563d2c84beb56dd3bc154bf269ff58715fe0",
+					"Gateway": "10.114.101.1",
+					"IPAddress": "10.114.101.2",
+					"IPPrefixLen": 24,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "02:42:0a:72:65:02",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": []
+	},
+	{
+		"Id": "731a4236fffd4b04e227610a799cdc1d9a2502aa74819eb429660365f9339f12",
+		"Names": ["/balena_supervisor"],
+		"Image": "registry2.balena-cloud.com/v2/1b7c800f05db49c6272b121fec9571d2",
+		"ImageID": "sha256:9353ade1d3771822553623eae31cbaf4c2f64901e92d5d872133127c6b88864c",
+		"Command": "/usr/src/app/entry.sh",
+		"Created": 1650564985,
+		"Ports": [],
+		"Labels": {},
+		"State": "running",
+		"Status": "Up 6 days (healthy)",
+		"HostConfig": {
+			"NetworkMode": "host"
+		},
+		"NetworkSettings": {
+			"Networks": {
+				"host": {
+					"IPAMConfig": null,
+					"Links": null,
+					"Aliases": null,
+					"NetworkID": "26efbeba14de03e35727f397a950e6d00b07c18f9a356660eeeffe30a6e4fdcb",
+					"EndpointID": "533d71d3e903db24db7ab89115fb2983217c72969be52caeb02b99d0cbd9958c",
+					"Gateway": "",
+					"IPAddress": "",
+					"IPPrefixLen": 0,
+					"IPv6Gateway": "",
+					"GlobalIPv6Address": "",
+					"GlobalIPv6PrefixLen": 0,
+					"MacAddress": "",
+					"DriverOpts": null
+				}
+			}
+		},
+		"Mounts": [
+			{
+				"Type": "bind",
+				"Source": "/mnt/boot/config.json",
+				"Destination": "/boot/config.json",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/usr/share/ca-certificates",
+				"Destination": "/usr/share/ca-certificates",
+				"Mode": "",
+				"RW": false,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/var/log/supervisor-log",
+				"Destination": "/var/log",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/var/run/balena-engine.sock",
+				"Destination": "/var/run/balena-engine.sock",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/mnt/data/apps.json",
+				"Destination": "/boot/apps.json",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/resin-data/balena-supervisor",
+				"Destination": "/data",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/etc/ssl/certs",
+				"Destination": "/etc/ssl/certs",
+				"Mode": "",
+				"RW": false,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/proc/net/fib_trie",
+				"Destination": "/mnt/fib_trie",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rprivate"
+			},
+			{
+				"Type": "bind",
+				"Source": "/",
+				"Destination": "/mnt/root",
+				"Mode": "",
+				"RW": true,
+				"Propagation": "rslave"
+			}
+		]
+	}
+]

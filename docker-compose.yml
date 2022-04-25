@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  volume-keeper:
+    build: .
+    labels:
+      io.balena.features.supervisor-api: 1
+      io.balena.features.balena-socket: 1
+    # volumes added here are automatically excluded from backups
+    volumes:
+      - cache:/cache
+      - snapshots:/snapshots
+    tmpfs:
+      - /tmp
+
+  test-service-1:
+    image: alpine
+    volumes:
+      - test-data-1:/data
+    command: tail -f /dev/null
+
+  test-service-2:
+    image: alpine
+    volumes:
+      - test-data-1:/data-1
+      - test-data-2:/data-2
+    command: tail -f /dev/null
+
+volumes:
+  cache:
+  snapshots:
+  test-data-1:
+  test-data-2:

@@ -1,0 +1,454 @@
+{
+  "status": "success",
+  "state": {
+    "local": {
+      "name": "dry-dew",
+      "config": {
+        "SUPERVISOR_DELTA_VERSION": "3",
+        "HOST_FIREWALL_MODE": "",
+        "SUPERVISOR_DELTA": "1",
+        "SUPERVISOR_LOCAL_MODE": "1",
+        "SUPERVISOR_POLL_INTERVAL": "900000",
+        "SUPERVISOR_DELTA_REQUEST_TIMEOUT": "59000",
+        "SUPERVISOR_VPN_CONTROL": "true",
+        "SUPERVISOR_INSTANT_UPDATE_TRIGGER": "true",
+        "SUPERVISOR_CONNECTIVITY_CHECK": "true",
+        "SUPERVISOR_LOG_CONTROL": "true",
+        "SUPERVISOR_DELTA_APPLY_TIMEOUT": "0",
+        "SUPERVISOR_DELTA_RETRY_COUNT": "30",
+        "SUPERVISOR_DELTA_RETRY_INTERVAL": "10000",
+        "SUPERVISOR_OVERRIDE_LOCK": "false",
+        "SUPERVISOR_PERSISTENT_LOGGING": "false",
+        "HOST_DISCOVERABILITY": "true",
+        "SUPERVISOR_HARDWARE_METRICS": "true"
+      },
+      "apps": {
+        "1": {
+          "appId": 1,
+          "commit": "localrelease",
+          "services": [
+            {
+              "imageId": 1,
+              "serviceName": "volume-keeper",
+              "appId": 1,
+              "releaseId": 1,
+              "serviceId": 1,
+              "imageName": "local_image_volume-keeper:latest",
+              "dependsOn": null,
+              "commit": "localrelease",
+              "config": {
+                "environment": {
+                  "BALENA_APP_ID": "1",
+                  "BALENA_APP_NAME": "localapp",
+                  "BALENA_SERVICE_NAME": "volume-keeper",
+                  "BALENA_DEVICE_UUID": "91f83c877237b2988cb4c51579290789",
+                  "BALENA_DEVICE_TYPE": "genericx86-64-ext",
+                  "BALENA_DEVICE_ARCH": "amd64",
+                  "BALENA_HOST_OS_VERSION": "balenaOS 2.95.12+rev1",
+                  "BALENA_APP_LOCK_PATH": "/tmp/balena/updates.lock",
+                  "BALENA": "1",
+                  "RESIN_APP_ID": "1",
+                  "RESIN_APP_NAME": "localapp",
+                  "RESIN_SERVICE_NAME": "volume-keeper",
+                  "RESIN_DEVICE_UUID": "91f83c877237b2988cb4c51579290789",
+                  "RESIN_DEVICE_TYPE": "genericx86-64-ext",
+                  "RESIN_DEVICE_ARCH": "amd64",
+                  "RESIN_HOST_OS_VERSION": "balenaOS 2.95.12+rev1",
+                  "RESIN_APP_LOCK_PATH": "/tmp/balena/updates.lock",
+                  "RESIN": "1",
+                  "RESIN_SERVICE_KILL_ME_PATH": "/tmp/balena/handover-complete",
+                  "BALENA_SERVICE_HANDOVER_COMPLETE_PATH": "/tmp/balena/handover-complete",
+                  "USER": "root",
+                  "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                  "NODE_VERSION": "17.9.0",
+                  "YARN_VERSION": "1.22.18",
+                  "BACKUP_CRON": "* * * * *",
+                  "DOCKER_HOST": "unix:///host/run/balena-engine.sock",
+                  "RESIN_SUPERVISOR_API_KEY": "5dba960e32254d04b90b1018b4b4386c",
+                  "BALENA_SUPERVISOR_API_KEY": "5dba960e32254d04b90b1018b4b4386c",
+                  "RESIN_SUPERVISOR_PORT": "48484",
+                  "BALENA_SUPERVISOR_PORT": "48484",
+                  "RESIN_SUPERVISOR_HOST": "10.114.104.1",
+                  "BALENA_SUPERVISOR_HOST": "10.114.104.1",
+                  "RESIN_SUPERVISOR_ADDRESS": "http://10.114.104.1:48484",
+                  "BALENA_SUPERVISOR_ADDRESS": "http://10.114.104.1:48484"
+                },
+                "labels": {
+                  "io.balena.local.image": "1",
+                  "io.balena.local.service": "volume-keeper",
+                  "io.balena.features.supervisor-api": "1",
+                  "io.balena.features.balena-socket": "1",
+                  "io.balena.supervised": "true",
+                  "io.balena.app-id": "1",
+                  "io.balena.service-id": "1",
+                  "io.balena.service-name": "volume-keeper"
+                },
+                "volumes": [
+                  "1_cache:/cache",
+                  "1_backups:/backups",
+                  "/tmp/balena-supervisor/services/1/volume-keeper:/tmp/resin",
+                  "/tmp/balena-supervisor/services/1/volume-keeper:/tmp/balena",
+                  "/var/run/balena-engine.sock:/host/run/balena-engine.sock",
+                  "/var/run/balena-engine.sock:/var/run/balena-engine.sock",
+                  "/var/run/balena-engine.sock:/var/run/balena.sock"
+                ],
+                "image": "sha256:1a56102cad443449737d2e3e7ea8744922032fceea6b8c748f5da0d58ad10d1e",
+                "running": true,
+                "networkMode": "1_default",
+                "restart": "always",
+                "command": [
+                  "dumb-init",
+                  "node",
+                  "/app/build/index.js"
+                ],
+                "entrypoint": [
+                  "docker-entrypoint.sh"
+                ],
+                "stopSignal": "SIGTERM",
+                "workingDir": "/app",
+                "user": "",
+                "oomKillDisable": false,
+                "readOnly": false,
+                "sysctls": {},
+                "portMaps": [],
+                "capAdd": [],
+                "capDrop": [],
+                "cgroupParent": "",
+                "devices": [],
+                "deviceRequests": [],
+                "dnsOpt": [],
+                "extraHosts": [],
+                "expose": [],
+                "networks": {
+                  "1_default": {
+                    "aliases": [
+                      "volume-keeper"
+                    ]
+                  },
+                  "supervisor0": {}
+                },
+                "dns": [],
+                "dnsSearch": [],
+                "ulimits": {},
+                "groupAdd": [],
+                "healthcheck": {
+                  "test": [
+                    "NONE"
+                  ]
+                },
+                "pid": "",
+                "pidsLimit": 0,
+                "securityOpt": [],
+                "stopGracePeriod": 10,
+                "tmpfs": [],
+                "usernsMode": "",
+                "cpuShares": 0,
+                "cpuQuota": 0,
+                "cpus": 0,
+                "cpuset": "",
+                "domainname": "",
+                "ipc": "shareable",
+                "macAddress": "",
+                "memLimit": 0,
+                "memReservation": 0,
+                "oomScoreAdj": 0,
+                "privileged": false,
+                "shmSize": 67108864,
+                "hostname": "",
+                "tty": true
+              },
+              "dockerImageId": "sha256:1a56102cad443449737d2e3e7ea8744922032fceea6b8c748f5da0d58ad10d1e"
+            },
+            {
+              "imageId": 2,
+              "serviceName": "test-service-1",
+              "appId": 1,
+              "releaseId": 1,
+              "serviceId": 2,
+              "imageName": "local_image_test-service-1:latest",
+              "dependsOn": null,
+              "commit": "localrelease",
+              "config": {
+                "environment": {
+                  "BALENA_APP_ID": "1",
+                  "BALENA_APP_NAME": "localapp",
+                  "BALENA_SERVICE_NAME": "test-service-1",
+                  "BALENA_DEVICE_UUID": "91f83c877237b2988cb4c51579290789",
+                  "BALENA_DEVICE_TYPE": "genericx86-64-ext",
+                  "BALENA_DEVICE_ARCH": "amd64",
+                  "BALENA_HOST_OS_VERSION": "balenaOS 2.95.12+rev1",
+                  "BALENA_APP_LOCK_PATH": "/tmp/balena/updates.lock",
+                  "BALENA": "1",
+                  "RESIN_APP_ID": "1",
+                  "RESIN_APP_NAME": "localapp",
+                  "RESIN_SERVICE_NAME": "test-service-1",
+                  "RESIN_DEVICE_UUID": "91f83c877237b2988cb4c51579290789",
+                  "RESIN_DEVICE_TYPE": "genericx86-64-ext",
+                  "RESIN_DEVICE_ARCH": "amd64",
+                  "RESIN_HOST_OS_VERSION": "balenaOS 2.95.12+rev1",
+                  "RESIN_APP_LOCK_PATH": "/tmp/balena/updates.lock",
+                  "RESIN": "1",
+                  "RESIN_SERVICE_KILL_ME_PATH": "/tmp/balena/handover-complete",
+                  "BALENA_SERVICE_HANDOVER_COMPLETE_PATH": "/tmp/balena/handover-complete",
+                  "USER": "root",
+                  "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+                },
+                "labels": {
+                  "io.balena.supervised": "true",
+                  "io.balena.app-id": "1",
+                  "io.balena.service-id": "2",
+                  "io.balena.service-name": "test-service-1"
+                },
+                "volumes": [
+                  "1_test-data-1:/data",
+                  "/tmp/balena-supervisor/services/1/test-service-1:/tmp/resin",
+                  "/tmp/balena-supervisor/services/1/test-service-1:/tmp/balena"
+                ],
+                "command": [
+                  "tail",
+                  "-f",
+                  "/dev/null"
+                ],
+                "image": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b",
+                "running": true,
+                "networkMode": "1_default",
+                "restart": "always",
+                "entrypoint": "",
+                "stopSignal": "SIGTERM",
+                "workingDir": "",
+                "user": "",
+                "oomKillDisable": false,
+                "readOnly": false,
+                "sysctls": {},
+                "portMaps": [],
+                "capAdd": [],
+                "capDrop": [],
+                "cgroupParent": "",
+                "devices": [],
+                "deviceRequests": [],
+                "dnsOpt": [],
+                "extraHosts": [],
+                "expose": [],
+                "networks": {
+                  "1_default": {
+                    "aliases": [
+                      "test-service-1"
+                    ]
+                  }
+                },
+                "dns": [],
+                "dnsSearch": [],
+                "ulimits": {},
+                "groupAdd": [],
+                "healthcheck": {
+                  "test": [
+                    "NONE"
+                  ]
+                },
+                "pid": "",
+                "pidsLimit": 0,
+                "securityOpt": [],
+                "stopGracePeriod": 10,
+                "tmpfs": [],
+                "usernsMode": "",
+                "cpuShares": 0,
+                "cpuQuota": 0,
+                "cpus": 0,
+                "cpuset": "",
+                "domainname": "",
+                "ipc": "shareable",
+                "macAddress": "",
+                "memLimit": 0,
+                "memReservation": 0,
+                "oomScoreAdj": 0,
+                "privileged": false,
+                "shmSize": 67108864,
+                "hostname": "",
+                "tty": true
+              },
+              "dockerImageId": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b"
+            },
+            {
+              "imageId": 3,
+              "serviceName": "test-service-2",
+              "appId": 1,
+              "releaseId": 1,
+              "serviceId": 3,
+              "imageName": "local_image_test-service-2:latest",
+              "dependsOn": null,
+              "commit": "localrelease",
+              "config": {
+                "environment": {
+                  "BALENA_APP_ID": "1",
+                  "BALENA_APP_NAME": "localapp",
+                  "BALENA_SERVICE_NAME": "test-service-2",
+                  "BALENA_DEVICE_UUID": "91f83c877237b2988cb4c51579290789",
+                  "BALENA_DEVICE_TYPE": "genericx86-64-ext",
+                  "BALENA_DEVICE_ARCH": "amd64",
+                  "BALENA_HOST_OS_VERSION": "balenaOS 2.95.12+rev1",
+                  "BALENA_APP_LOCK_PATH": "/tmp/balena/updates.lock",
+                  "BALENA": "1",
+                  "RESIN_APP_ID": "1",
+                  "RESIN_APP_NAME": "localapp",
+                  "RESIN_SERVICE_NAME": "test-service-2",
+                  "RESIN_DEVICE_UUID": "91f83c877237b2988cb4c51579290789",
+                  "RESIN_DEVICE_TYPE": "genericx86-64-ext",
+                  "RESIN_DEVICE_ARCH": "amd64",
+                  "RESIN_HOST_OS_VERSION": "balenaOS 2.95.12+rev1",
+                  "RESIN_APP_LOCK_PATH": "/tmp/balena/updates.lock",
+                  "RESIN": "1",
+                  "RESIN_SERVICE_KILL_ME_PATH": "/tmp/balena/handover-complete",
+                  "BALENA_SERVICE_HANDOVER_COMPLETE_PATH": "/tmp/balena/handover-complete",
+                  "USER": "root",
+                  "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+                },
+                "labels": {
+                  "io.balena.supervised": "true",
+                  "io.balena.app-id": "1",
+                  "io.balena.service-id": "3",
+                  "io.balena.service-name": "test-service-2"
+                },
+                "volumes": [
+                  "1_test-data-1:/data-1",
+                  "1_test-data-2:/data-2",
+                  "/tmp/balena-supervisor/services/1/test-service-2:/tmp/resin",
+                  "/tmp/balena-supervisor/services/1/test-service-2:/tmp/balena"
+                ],
+                "command": [
+                  "tail",
+                  "-f",
+                  "/dev/null"
+                ],
+                "image": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b",
+                "running": true,
+                "networkMode": "1_default",
+                "restart": "always",
+                "entrypoint": "",
+                "stopSignal": "SIGTERM",
+                "workingDir": "",
+                "user": "",
+                "oomKillDisable": false,
+                "readOnly": false,
+                "sysctls": {},
+                "portMaps": [],
+                "capAdd": [],
+                "capDrop": [],
+                "cgroupParent": "",
+                "devices": [],
+                "deviceRequests": [],
+                "dnsOpt": [],
+                "extraHosts": [],
+                "expose": [],
+                "networks": {
+                  "1_default": {
+                    "aliases": [
+                      "test-service-2"
+                    ]
+                  }
+                },
+                "dns": [],
+                "dnsSearch": [],
+                "ulimits": {},
+                "groupAdd": [],
+                "healthcheck": {
+                  "test": [
+                    "NONE"
+                  ]
+                },
+                "pid": "",
+                "pidsLimit": 0,
+                "securityOpt": [],
+                "stopGracePeriod": 10,
+                "tmpfs": [],
+                "usernsMode": "",
+                "cpuShares": 0,
+                "cpuQuota": 0,
+                "cpus": 0,
+                "cpuset": "",
+                "domainname": "",
+                "ipc": "shareable",
+                "macAddress": "",
+                "memLimit": 0,
+                "memReservation": 0,
+                "oomScoreAdj": 0,
+                "privileged": false,
+                "shmSize": 67108864,
+                "hostname": "",
+                "tty": true
+              },
+              "dockerImageId": "sha256:0ac33e5f5afa79e084075e8698a22d574816eea8d7b7d480586835657c3e1c8b"
+            }
+          ],
+          "volumes": {
+            "cache": {
+              "name": "cache",
+              "appId": 1,
+              "config": {
+                "driverOpts": {},
+                "driver": "local",
+                "labels": {
+                  "io.balena.supervised": "true"
+                }
+              }
+            },
+            "backups": {
+              "name": "backups",
+              "appId": 1,
+              "config": {
+                "driverOpts": {},
+                "driver": "local",
+                "labels": {
+                  "io.balena.supervised": "true"
+                }
+              }
+            },
+            "test-data-1": {
+              "name": "test-data-1",
+              "appId": 1,
+              "config": {
+                "driverOpts": {},
+                "driver": "local",
+                "labels": {
+                  "io.balena.supervised": "true"
+                }
+              }
+            },
+            "test-data-2": {
+              "name": "test-data-2",
+              "appId": 1,
+              "config": {
+                "driverOpts": {},
+                "driver": "local",
+                "labels": {
+                  "io.balena.supervised": "true"
+                }
+              }
+            }
+          },
+          "networks": {
+            "default": {
+              "name": "default",
+              "appId": 1,
+              "config": {
+                "driver": "bridge",
+                "ipam": {
+                  "driver": "default",
+                  "config": [],
+                  "options": {}
+                },
+                "enableIPv6": false,
+                "internal": false,
+                "labels": {},
+                "options": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "dependent": {
+      "apps": [],
+      "devices": []
+    }
+  }
+}

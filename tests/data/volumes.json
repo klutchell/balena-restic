@@ -1,0 +1,162 @@
+{
+	"Volumes": [
+		{
+			"CreatedAt": "2022-04-26T18:34:15Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_test-data-1/_data",
+			"Name": "1_test-data-1",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T18:34:15Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_test-data-2/_data",
+			"Name": "1_test-data-2",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-21T18:25:03Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_tokens/_data",
+			"Name": "1_tokens",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T22:10:00Z",
+			"Driver": "local",
+			"Labels": null,
+			"Mountpoint": "/var/lib/docker/volumes/a0fa0fa95e37ff3191298dce56b23304d3f4e1b0b92758387d91e0f8c77db512/_data",
+			"Name": "a0fa0fa95e37ff3191298dce56b23304d3f4e1b0b92758387d91e0f8c77db512",
+			"Options": null,
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T16:30:59Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_resin-data/_data",
+			"Name": "1_resin-data",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T22:10:00Z",
+			"Driver": "local",
+			"Labels": null,
+			"Mountpoint": "/var/lib/docker/volumes/5da59d177ae20c48d8a0dd110541f421d192e38fe2a65ae09a031ac487d11e15/_data",
+			"Name": "5da59d177ae20c48d8a0dd110541f421d192e38fe2a65ae09a031ac487d11e15",
+			"Options": null,
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T16:31:00Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_mqtt/_data",
+			"Name": "1_mqtt",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T22:09:00Z",
+			"Driver": "local",
+			"Labels": null,
+			"Mountpoint": "/var/lib/docker/volumes/d2f27add532fc41d131677880da8648c33680f46cd217a76aeced64bd1ebfa11/_data",
+			"Name": "d2f27add532fc41d131677880da8648c33680f46cd217a76aeced64bd1ebfa11",
+			"Options": null,
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-28T14:43:58Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_cache/_data",
+			"Name": "1_cache",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-21T18:25:03Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_config/_data",
+			"Name": "1_config",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-21T18:25:34Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_media/_data",
+			"Name": "1_media",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-28T17:29:28Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_snapshots/_data",
+			"Name": "1_snapshots",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T16:33:26Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_test-data/_data",
+			"Name": "1_test-data",
+			"Options": {},
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-26T22:09:00Z",
+			"Driver": "local",
+			"Labels": null,
+			"Mountpoint": "/var/lib/docker/volumes/8f6b311cc7616a798524ca4ab448aadea67ae80681da4ef34f7a69c6be2b4ba7/_data",
+			"Name": "8f6b311cc7616a798524ca4ab448aadea67ae80681da4ef34f7a69c6be2b4ba7",
+			"Options": null,
+			"Scope": "local"
+		},
+		{
+			"CreatedAt": "2022-04-28T14:43:58Z",
+			"Driver": "local",
+			"Labels": {
+				"io.balena.supervised": "true"
+			},
+			"Mountpoint": "/var/lib/docker/volumes/1_backups/_data",
+			"Name": "1_backups",
+			"Options": {},
+			"Scope": "local"
+		}
+	],
+	"Warnings": null
+}
