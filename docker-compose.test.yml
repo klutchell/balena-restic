@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+  sut:
+    build: .
+    # volumes added here are automatically excluded from backups
+    volumes:
+      - cache:/cache
+      - snapshots:/snapshots
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    tmpfs:
+      - /tmp
+    environment:
+      BACKUP_CRON: ""
+      # INCLUDE_VOLUMES: test-data-2
+      EXCLUDE_VOLUMES: test-data-1
+      RESTIC_PASSWORD: balena
+    depends_on:
+      - test-service-1
+      - test-service-2
+
+  test-service-1:
+    image: alpine
+    volumes:
+      - test-data-1:/data
+    command: tail -f /dev/null
+
+  test-service-2:
+    image: alpine
+    volumes:
+      - test-data-1:/data-1
+      - test-data-2:/data-2
+    command: tail -f /dev/null
+
+volumes:
+  cache:
+  snapshots:
+  test-data-1:
+  test-data-2:
