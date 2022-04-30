@@ -12,6 +12,7 @@ services:
       - snapshots:/snapshots
     tmpfs:
       - /tmp
+    restart: never
 
   test-service-1:
     image: alpine

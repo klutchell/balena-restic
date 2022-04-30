@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as cron from 'node-cron';
+// import * as cron from 'node-cron';
 // import * as Docker from 'dockerode';
 import _ = require('lodash');
 import * as supervisor from './supervisor';
@@ -8,15 +8,18 @@ import * as engine from './docker';
 import { ENVIRONMENT_VARIABLES } from './restic';
 
 const THIS_SERVICE = process.env.BALENA_SERVICE_NAME || '';
-const BACKUP_CRON = process.env.BACKUP_CRON || '0 */8 * * *'; // default to every 8 hours
+// const BACKUP_CRON = process.env.BACKUP_CRON || '0 */8 * * *'; // default to every 8 hours
 const RESTORE_FILE = process.env.RESTORE_FILE || '/tmp/restore';
 const INCLUDE_VOLUMES = process.env.INCLUDE_VOLUMES || '';
 const EXCLUDE_VOLUMES = process.env.EXCLUDE_VOLUMES || '';
 
-const getContainerOpts = (volumes: string[], mode: 'ro' | 'rw' = 'ro'): {} => {
+const containerOpts = (volumes: string[], mode: 'ro' | 'rw' = 'ro'): {} => {
 	const opts = {
 		Env: [] as string[],
-		Hostconfig: { Binds: [] as string[] },
+		Hostconfig: {
+			AutoRemove: true,
+			Binds: [] as string[],
+		},
 	};
 
 	// add each volume mount
@@ -34,31 +37,13 @@ const getContainerOpts = (volumes: string[], mode: 'ro' | 'rw' = 'ro'): {} => {
 	return opts;
 };
 
-// const getAllowedVolumesFromEngine = (
-// 	included: string[],
-// 	excluded: string[],
-// 	volumes: Docker.VolumeInspectInfo[],
-// ): string[] => {
-// 	return volumes
-// 		.filter((item: any) => {
-// 			return (
-// 				!excluded.includes(item.Name) &&
-// 				(included.length === 0 ? true : included.includes(item.Name))
-// 			);
-// 		})
-// 		.map((item: any) => item.Name);
-// };
-
-const getAllowedVolumes = (
+const filterVolumes = (
 	included: string[],
 	excluded: string[],
 	state: any,
 ): string[] => {
 	// TODO: support multiple apps here
 	const volumes = state.local.apps['1'].volumes;
-	console.debug(included);
-	console.debug(excluded);
-	console.debug(volumes);
 	return _.flow([
 		Object.entries,
 		(arr) =>
@@ -70,27 +55,7 @@ const getAllowedVolumes = (
 			}),
 		(arr) => arr.map(([_key, value]: any) => value.name),
 	])(volumes);
-	// return Object.entries(volumes)
-	// 	.filter(([key]) => {
-	// 		return (
-	// 			!excluded.includes(key) &&
-	// 			(included.length === 0 ? true : included.includes(key))
-	// 		);
-	// 	})
-	// 	.map((item: any) => item.name);
 };
-
-// const getServiceVolumesFromEngine = (
-// 	service: string,
-// 	containers: Docker.ContainerInfo[],
-// ): string[] => {
-// 	return containers
-// 		.filter((item: any) => {
-// 			return item.Labels['io.balena.service-name'] === service;
-// 		})[0]
-// 		.Mounts.filter((mount) => mount.Name)
-// 		.map((mount: any) => mount.Name);
-// };
 
 const getServiceVolumes = (service: string, state: any): string[] => {
 	// TODO: support multiple apps here
@@ -103,15 +68,6 @@ const getServiceVolumes = (service: string, state: any): string[] => {
 			(volume: string) => volume.split('_').slice(1).join('_').split(':')[0],
 		);
 };
-
-// const getServiceImageFromEngine = (
-// 	service: string,
-// 	containers: Docker.ContainerInfo[],
-// ): string => {
-// 	return containers.filter((item: any) => {
-// 		return item.Labels['io.balena.service-name'] === service;
-// 	})[0].Image;
-// };
 
 const getServiceImage = (service: string, state: any): string => {
 	// TODO: support multiple apps here
@@ -128,6 +84,7 @@ const stateToEngineVolume = async (
 	// TODO: support multiple apps here
 	const appId = state.local.apps['1'].volumes[volume]?.appId;
 	const volumes = await engine.getSupervisedVolumes();
+
 	if (appId != null) {
 		return volumes
 			.filter((item: any) => {
@@ -135,6 +92,22 @@ const stateToEngineVolume = async (
 			})
 			.map((item: any) => item.Name)[0];
 	}
+};
+
+const getEligibleVolumes = async (state: any): Promise<string[]> => {
+	const included = INCLUDE_VOLUMES.split(/[\s,;]+/).filter((elem) => elem);
+	const excluded = _.union(
+		EXCLUDE_VOLUMES.split(/[\s,;]+/),
+		getServiceVolumes(THIS_SERVICE, state),
+	).filter((elem) => elem);
+
+	return await Promise.all(
+		filterVolumes(included, excluded, state).map(async (volume) => {
+			return await stateToEngineVolume(volume, state);
+		}),
+	).then((values) => {
+		return values.filter((value) => value !== undefined) as string[];
+	});
 };
 
 const backup = async (): Promise<void> => {
@@ -148,45 +121,11 @@ const backup = async (): Promise<void> => {
 	}
 
 	const targetState = (await supervisor.getLocalTargetState()).state;
-	// const containers = await engine.getSupervisedContainers();
-	// const volumes = await engine.getSupervisedVolumes();
 
-	// const included: string[] = [];
-	// INCLUDE_VOLUMES.split(/[\s,;]+/).forEach((volume: string) => {
-	// 	const volumeName = stateVolToEngineVol(volume, targetState, volumes);
-	// 	if (volumeName != null) {
-	// 		included.push(volumeName);
-	// 	}
-	// });
-
-	// always exclude volumes attached to this service
-	// const excluded = getServiceVolumes(THIS_SERVICE, containers) || [];
-	// EXCLUDE_VOLUMES.split(/[\s,;]+/).forEach((volume: string) => {
-	// 	const volumeName = stateVolToEngineVol(volume, targetState, volumes);
-	// 	if (volumeName != null) {
-	// 		excluded.push(volumeName);
-	// 	}
-	// });
-
-	const included = INCLUDE_VOLUMES.split(/[\s,;]+/).filter((elem) => elem);
-	const excluded = _.union(
-		EXCLUDE_VOLUMES.split(/[\s,;]+/).filter((elem) => elem),
-		getServiceVolumes(THIS_SERVICE, targetState),
-	);
-
-	const volumes: string[] = [];
-	getAllowedVolumes(included, excluded, targetState).forEach(
-		async (volume: string) => {
-			const engineVol = await stateToEngineVolume(volume, targetState);
-			if (engineVol != null) {
-				volumes.push(engineVol);
-			}
-		},
-	);
-
+	const volumes = await getEligibleVolumes(targetState);
 	const image = getServiceImage(THIS_SERVICE, targetState);
 
-	const opts = getContainerOpts(volumes);
+	const opts = containerOpts(volumes);
 	console.debug(opts);
 
 	return await engine.runContainer(image, ['restic', 'version'], opts);
@@ -218,8 +157,10 @@ class FileWatcher {
 
 new FileWatcher(RESTORE_FILE).observe();
 
-console.log(`Starting backup cron with schedule '${BACKUP_CRON}'`);
-cron.schedule(BACKUP_CRON, () => {
-	console.log('Starting backup process...');
-	backup();
-});
+// console.log(`Starting backup cron with schedule '${BACKUP_CRON}'`);
+// cron.schedule(BACKUP_CRON, () => {
+// 	console.log('Starting backup process...');
+// 	backup();
+// });
+
+backup();
