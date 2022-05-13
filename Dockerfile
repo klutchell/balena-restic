@@ -23,7 +23,7 @@ COPY --from=deps /app/build /app/build
 
 CMD [ "dumb-init", "node", "/app/build/index.js" ]
 
-ENV BACKUP_CRON "* * * * *"
+# ENV BACKUP_CRON "* * * * *"
 
 ENV RESTIC_PASSWORD "balena"
 ENV RESTIC_REPOSITORY "/snapshots"

@@ -1,5 +1,5 @@
 import * as Docker from 'dockerode';
-// import _ = require('lodash');
+import { readFile } from 'fs';
 
 const docker = new Docker();
 
@@ -61,6 +61,60 @@ export const runContainer = async (
 			console.log('container removed');
 		})
 		.catch(function (err) {
-			throw new Error(err);
+			// ignore in progress and missing codes
+			if (err.statusCode !== 409 && err.statusCode !== 404) {
+				throw new Error(err);
+			}
 		});
+};
+
+export const getContainerId = async (): Promise<string> => {
+	const readFilePromise = require('util').promisify(readFile);
+	return readFilePromise('/proc/self/cgroup', 'utf8')
+		.then((data: string) => {
+			const re = /docker-(?<containerId>[a-f0-9]+)\.scope$/;
+			return data
+				.split('\n')
+				.filter((f) => re.test(f))
+				.shift()
+				?.match(re)?.groups?.containerId;
+		})
+		.catch((err: NodeJS.ErrnoException) => {
+			if (err.code === 'ENOENT') {
+				// Not on Linux or using cgroups v2
+				throw err;
+			} else if (err) {
+				// whoops
+				throw err;
+			}
+		});
+};
+
+export const getContainerMounts = (
+	id: string,
+	containers: Docker.ContainerInfo[],
+): any[] | undefined => {
+	return containers.filter((f) => f.Id === id).shift()?.Mounts;
+};
+
+export const getContainerImage = (
+	id: string,
+	containers: Docker.ContainerInfo[],
+): string | undefined => {
+	return containers
+		.filter((e) => e.Id === id)
+		.map((e) => e.ImageID)
+		.pop();
+};
+
+export const resolveVolumeNames = (
+	name: string,
+	volumes: Docker.VolumeInspectInfo[],
+): string[] | undefined => {
+	if (volumes.map((e) => e.Name).includes(name)) {
+		return [name];
+	}
+	return volumes
+		.map((m) => m.Name)
+		.filter((f) => new RegExp(`^[0-9]+_${name}$`).test(f));
 };

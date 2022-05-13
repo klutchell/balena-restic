@@ -1,113 +1,113 @@
 import * as fs from 'fs';
 import * as path from 'path';
-// import * as cron from 'node-cron';
-// import * as Docker from 'dockerode';
-import _ = require('lodash');
-import * as supervisor from './supervisor';
-import * as engine from './docker';
+import * as cron from 'node-cron';
+import * as _ from 'lodash';
+import {
+	getSupervisedContainers,
+	getSupervisedVolumes,
+	getContainerId,
+	getContainerImage,
+	getContainerMounts,
+	resolveVolumeNames,
+	runContainer,
+} from './docker';
 import { ENVIRONMENT_VARIABLES } from './restic';
 
-const THIS_SERVICE = process.env.BALENA_SERVICE_NAME || '';
-// const BACKUP_CRON = process.env.BACKUP_CRON || '0 */8 * * *'; // default to every 8 hours
+const BACKUP_CRON = process.env.BACKUP_CRON || '0 */8 * * *'; // default to every 8 hours
 const RESTORE_FILE = process.env.RESTORE_FILE || '/tmp/restore';
 const INCLUDE_VOLUMES = process.env.INCLUDE_VOLUMES || '';
 const EXCLUDE_VOLUMES = process.env.EXCLUDE_VOLUMES || '';
 
-const containerOpts = (volumes: string[], mode: 'ro' | 'rw' = 'ro'): {} => {
+const containerOpts = async (
+	mode: 'ro' | 'rw' = 'ro',
+): Promise<{ image: string; opts: {} }> => {
+	const containers = await getSupervisedContainers();
+	const volumes = await getSupervisedVolumes();
+	const containerId = await getContainerId();
+
+	const image = getContainerImage(containerId, containers);
+
+	if (image == null) {
+		throw new Error(`Failed to get imageID for container ${containerId}`);
+	}
+
+	// record the mounts from this container as they are treated differently
+	const mounts = getContainerMounts(containerId, containers)?.filter(
+		(f) => f.Name != null,
+	);
+
+	// read the exclude volumes env var, resolve the names, and append the special mounts
+	const excludeVolumes: string[] = _.uniq(
+		EXCLUDE_VOLUMES.split(/[\s,;]+/)
+			.filter((f) => f != null)
+			.map((m) => resolveVolumeNames(m, volumes))
+			.flat()
+			.concat(mounts?.map((m) => m.Name))
+			.filter((f) => f != null) as string[],
+	);
+
+	console.error('===================================================');
+	console.error(
+		'excludeVolumes',
+		require('util').inspect(excludeVolumes, {
+			depth: null,
+			maxArrayLength: Infinity,
+		}),
+	);
+	console.error('===================================================');
+
+	// read the include volumes env var, resolve the names, remove the excluded volumes
+	const includeVolumes: string[] = _.uniq(
+		INCLUDE_VOLUMES.split(/[\s,;]+/)
+			.filter((f) => f != null)
+			.map((m) => resolveVolumeNames(m, volumes))
+			.flat()
+			.filter((f) => f == null || !excludeVolumes.includes(f)) as string[],
+	);
+
+	console.error('===================================================');
+	console.error(
+		'includeVolumes',
+		require('util').inspect(includeVolumes, {
+			depth: null,
+			maxArrayLength: Infinity,
+		}),
+	);
+	console.error('===================================================');
+
+	const binds: string[] = volumes
+		.filter((f) =>
+			includeVolumes.length > 0
+				? includeVolumes.includes(f.Name)
+				: !excludeVolumes.includes(f.Name),
+		)
+		.map((m) => `${m.Name}:/data/${m.Name}:${mode}`)
+		.concat(
+			mounts?.map((m) => `${m.Name}:${m.Destination}:${m.RW ? 'rw' : 'ro'}`) ||
+				[],
+		);
+
+	// clone the supported env vars to the new container
+	const envs = ENVIRONMENT_VARIABLES.filter((f) => process.env[f] != null).map(
+		(m) => `${m}=${process.env[m]}`,
+	);
+
 	const opts = {
-		Env: [] as string[],
+		Env: envs,
 		Hostconfig: {
 			AutoRemove: true,
-			Binds: [] as string[],
+			Binds: binds,
 		},
 	};
 
-	// add each volume mount
-	volumes.forEach((vol) => {
-		opts.Hostconfig.Binds.push(`${vol}:/volumes/${vol}:${mode}`);
-	});
+	console.error('===================================================');
+	console.error(
+		'opts',
+		require('util').inspect(opts, { depth: null, maxArrayLength: Infinity }),
+	);
+	console.error('===================================================');
 
-	// clone the supported env vars to the new container
-	ENVIRONMENT_VARIABLES.forEach((key) => {
-		if (process.env[key] != null) {
-			opts.Env.push(`${key}=${process.env[key]}`);
-		}
-	});
-
-	return opts;
-};
-
-const filterVolumes = (
-	included: string[],
-	excluded: string[],
-	state: any,
-): string[] => {
-	// TODO: support multiple apps here
-	const volumes = state.local.apps['1'].volumes;
-	return _.flow([
-		Object.entries,
-		(arr) =>
-			arr.filter(([_key, value]: any) => {
-				return (
-					!excluded.includes(value.name) &&
-					(included.length < 1 ? true : included.includes(value.name))
-				);
-			}),
-		(arr) => arr.map(([_key, value]: any) => value.name),
-	])(volumes);
-};
-
-const getServiceVolumes = (service: string, state: any): string[] => {
-	// TODO: support multiple apps here
-	const services = state.local.apps['1'].services;
-	return services
-		.filter((item: any) => {
-			return item.serviceName === service;
-		})[0]
-		.config.volumes.map(
-			(volume: string) => volume.split('_').slice(1).join('_').split(':')[0],
-		);
-};
-
-const getServiceImage = (service: string, state: any): string => {
-	// TODO: support multiple apps here
-	const services = state.local.apps['1'].services;
-	return services.filter((item: any) => {
-		return item.serviceName === service;
-	})[0].imageName;
-};
-
-const stateToEngineVolume = async (
-	volume: string,
-	state: any,
-): Promise<string | undefined> => {
-	// TODO: support multiple apps here
-	const appId = state.local.apps['1'].volumes[volume]?.appId;
-	const volumes = await engine.getSupervisedVolumes();
-
-	if (appId != null) {
-		return volumes
-			.filter((item: any) => {
-				return item.Name === [appId, volume].join('_');
-			})
-			.map((item: any) => item.Name)[0];
-	}
-};
-
-const getEligibleVolumes = async (state: any): Promise<string[]> => {
-	const included = INCLUDE_VOLUMES.split(/[\s,;]+/).filter((elem) => elem);
-	const excluded = _.union(
-		EXCLUDE_VOLUMES.split(/[\s,;]+/),
-		getServiceVolumes(THIS_SERVICE, state),
-	).filter((elem) => elem);
-
-	return await Promise.all(
-		filterVolumes(included, excluded, state).map(async (volume) => {
-			return await stateToEngineVolume(volume, state);
-		}),
-	).then((values) => {
-		return values.filter((value) => value !== undefined) as string[];
-	});
+	return { image, opts };
 };
 
 const backup = async (): Promise<void> => {
@@ -120,15 +120,9 @@ const backup = async (): Promise<void> => {
 		console.error(err);
 	}
 
-	const targetState = (await supervisor.getLocalTargetState()).state;
+	const { image, opts } = await containerOpts();
 
-	const volumes = await getEligibleVolumes(targetState);
-	const image = getServiceImage(THIS_SERVICE, targetState);
-
-	const opts = containerOpts(volumes);
-	console.debug(opts);
-
-	return await engine.runContainer(image, ['restic', 'version'], opts);
+	return await runContainer(image, ['restic', 'version'], opts);
 };
 
 // const restore = async (): Promise<void> => {
@@ -157,10 +151,10 @@ class FileWatcher {
 
 new FileWatcher(RESTORE_FILE).observe();
 
-// console.log(`Starting backup cron with schedule '${BACKUP_CRON}'`);
-// cron.schedule(BACKUP_CRON, () => {
-// 	console.log('Starting backup process...');
-// 	backup();
-// });
-
 backup();
+
+console.log(`Starting backup cron with schedule '${BACKUP_CRON}'`);
+cron.schedule(BACKUP_CRON, () => {
+	console.log('Starting backup process...');
+	backup();
+});
