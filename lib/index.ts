@@ -8,11 +8,12 @@ import {
 	KEEP_DAILY,
 	KEEP_HOURLY,
 } from './config';
+import { logger } from './logger';
 
 if (BACKUP_CRON) {
-	console.log(`Scheduling backup cron with schedule '${BACKUP_CRON}'`);
+	logger.info(`Scheduling backup cron with schedule '${BACKUP_CRON}'`);
 	schedule(BACKUP_CRON, async () => {
-		console.log('Starting backup process...');
+		logger.info('Starting scheduled backup...');
 		const [host, tags] = await Promise.all([getHost(), getTags()]);
 		return doBackup([`--host=${host}`, `--tag=${tags}`]).then(() =>
 			doPrune([
@@ -27,7 +28,7 @@ if (BACKUP_CRON) {
 }
 
 const dryRun = async () => {
-	console.log('Starting backup dry-run...');
+	logger.info('Starting dry-run...');
 	const [host, tags] = await Promise.all([getHost(), getTags()]);
 	return doBackup(['--dry-run', `--host=${host}`, `--tag=${tags}`]);
 };

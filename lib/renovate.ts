@@ -18,6 +18,7 @@ import { hostname } from 'os';
 import { VolumeInspectInfo, ContainerInspectInfo } from 'dockerode';
 import * as util from 'util';
 import { exec } from 'child_process';
+import { logger } from './logger';
 
 const execSync = util.promisify(exec);
 
@@ -85,18 +86,22 @@ const getContainerOpts = async (
 ): Promise<[string, {}]> => {
 	const resticVolumes = self.Mounts.filter((f) => f.Name);
 
-	const dataVolumes = isSupervised(self)
-		? await listVolumesFilter(supervisedFilter.bind(null, getAppId(self)))
-		: await listVolumesFilter(composedFilter.bind(null, getProjectName(self)));
+	logger.info('Getting eligible data volumes...');
+	const dataVolumes = (
+		isSupervised(self)
+			? await listVolumesFilter(supervisedFilter.bind(null, getAppId(self)))
+			: await listVolumesFilter(composedFilter.bind(null, getProjectName(self)))
+	).filter((f) => !resticVolumes.map((m) => m.Name).includes(f.Name));
 
 	if (dataVolumes.length < 1) {
-		throw new Error(
+		logger.error(
 			'No data volumes found! Check that volumes exist and have not be excluded.',
 		);
 	}
 
+	console.debug(dataVolumes.map((m) => m.Name));
+
 	const binds: string[] = dataVolumes
-		.filter((f) => !resticVolumes.map((m) => m.Name).includes(f.Name))
 		.map((m) => `${m.Name}:${BIND_ROOT_PATH}/${m.Name}:${mode}`)
 		.concat(
 			resticVolumes.map(
@@ -121,48 +126,50 @@ const getContainerOpts = async (
 };
 
 // https://restic.readthedocs.io/en/latest/040_backup.html
-export const doBackup = async (resticOpts: string[] = []): Promise<void> => {
+export const doBackup = async (args: string[] = []): Promise<void> => {
 	const self = await inspectSelf();
 
 	return execSync('restic init || true')
-		.then((out) => {
-			if (out.stdout) {
-				console.log(out.stdout);
-			} else {
-				// console.log(out.stderr);
+		.then(({ stdout, stderr }) => {
+			if (stdout) {
+				console.log(stdout);
+			}
+			if (stderr) {
+				// console.error(stderr);
 			}
 		})
 		.then(() => {
 			return getContainerOpts(self, 'ro'); // read-only
 		})
 		.then(([image, opts]) => {
+			logger.info('Running backup via temporary container...');
 			return executeInContainer(
 				image,
 				[
 					'sh',
 					'-c',
 					'--',
-					`restic backup ${BIND_ROOT_PATH} -vv ${resticOpts.join(' ')} | cat`,
+					`restic backup ${BIND_ROOT_PATH} -vv ${args.join(' ')} | cat`,
 				],
 				opts,
 			);
 		})
 		.then(() => {
+			logger.info('Listing snapshots...');
 			return execSync('restic snapshots');
 		})
-		.then((out) => {
-			if (out.stdout) {
-				console.log(out.stdout);
-			} else {
-				console.log(out.stderr);
+		.then(({ stdout, stderr }) => {
+			if (stdout) {
+				console.log(stdout);
+			}
+			if (stderr) {
+				console.error(stderr);
 			}
 		});
 };
 
 // https://restic.readthedocs.io/en/latest/050_restore.html
-export const doRestore = async (
-	resticOpts: string[] = ['latest'],
-): Promise<void> => {
+export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 	const self = await inspectSelf();
 
 	let services = [];
@@ -185,13 +192,14 @@ export const doRestore = async (
 			return getContainerOpts(self, 'rw'); // read-write
 		})
 		.then(([image, opts]) => {
+			logger.info('Running restore via temporary container...');
 			return executeInContainer(
 				image,
 				[
 					'sh',
 					'-c',
 					'--',
-					`restic restore --target=${BIND_ROOT_PATH} -vv ${resticOpts.join(
+					`restic restore --target=${BIND_ROOT_PATH} -vv ${args.join(
 						' ',
 					)} | cat`,
 				],
@@ -204,16 +212,15 @@ export const doRestore = async (
 };
 
 // https://restic.readthedocs.io/en/latest/060_forget.html
-export const doPrune = async (resticOpts: string[] = []): Promise<void> => {
+export const doPrune = async (args: string[] = []): Promise<void> => {
 	return execSync(
-		`restic forget --prune --group-by=paths,tags ${resticOpts.join(
-			' ',
-		)} -vv | cat`,
-	).then((out) => {
-		if (out.stdout) {
-			console.log(out.stdout);
-		} else {
-			console.log(out.stderr);
+		`restic forget --prune --group-by=paths,tags ${args.join(' ')} -vv | cat`,
+	).then(({ stdout, stderr }) => {
+		if (stdout) {
+			console.log(stdout);
+		}
+		if (stderr) {
+			console.error(stderr);
 		}
 	});
 };

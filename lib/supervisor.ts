@@ -1,6 +1,7 @@
 import { Response } from 'node-fetch';
 import fetch from 'node-fetch';
 import { SUPERVISOR_ADDRESS, SUPERVISOR_API_KEY } from './config';
+import { logger } from './logger';
 
 class HTTPResponseError extends Error {
 	public readonly response: Response;
@@ -24,61 +25,41 @@ const checkStatus = (response: Response) => {
 export const getStateStatus = async (): Promise<any> => {
 	return await fetch(
 		`${SUPERVISOR_ADDRESS}/v2/state/status?apikey=${SUPERVISOR_API_KEY}`,
-	)
-		.then((response) => {
-			return checkStatus(response).json();
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response).json();
+	});
 };
 
 export const getLocalTargetState = async (): Promise<any> => {
 	return await fetch(
 		`${SUPERVISOR_ADDRESS}/v2/local/target-state?apikey=${SUPERVISOR_API_KEY}`,
-	)
-		.then((response) => {
-			return checkStatus(response).json();
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response).json();
+	});
 };
 
 export const getDeviceHostConfig = async (): Promise<any> => {
 	return await fetch(
 		`${SUPERVISOR_ADDRESS}/v1/device/host-config?apikey=${SUPERVISOR_API_KEY}`,
-	)
-		.then((response) => {
-			return checkStatus(response).json();
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response).json();
+	});
 };
 
 export const getDeviceName = async (): Promise<any> => {
 	return await fetch(
 		`${SUPERVISOR_ADDRESS}/v2/device/name?apikey=${SUPERVISOR_API_KEY}`,
-	)
-		.then((response) => {
-			return checkStatus(response).json();
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response).json();
+	});
 };
 
 export const getDeviceTags = async (): Promise<any> => {
 	return await fetch(
 		`${SUPERVISOR_ADDRESS}/v2/device/tags?apikey=${SUPERVISOR_API_KEY}`,
-	)
-		.then((response) => {
-			return checkStatus(response).json();
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response).json();
+	});
 };
 
 // https://www.balena.io/docs/reference/supervisor/supervisor-api/#post-v2applicationsappidstop-service
@@ -93,13 +74,9 @@ export const stopService = async (
 			body: JSON.stringify({ serviceName }),
 			headers: { 'Content-Type': 'application/json' },
 		},
-	)
-		.then((response) => {
-			return checkStatus(response);
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response);
+	});
 };
 
 // https://www.balena.io/docs/reference/supervisor/supervisor-api/#post-v2applicationsappidstart-service
@@ -114,19 +91,17 @@ export const startService = async (
 			body: JSON.stringify({ serviceName }),
 			headers: { 'Content-Type': 'application/json' },
 		},
-	)
-		.then((response) => {
-			return checkStatus(response);
-		})
-		.catch((err) => {
-			throw new Error(err);
-		});
+	).then((response) => {
+		return checkStatus(response);
+	});
 };
 
 export const stopServices = async (
 	appId: string,
 	services: string[],
 ): Promise<any> => {
+	logger.info('Stopping services...');
+	console.debug(services);
 	return await Promise.all(services.map((m) => stopService(appId, m)));
 };
 
@@ -134,5 +109,7 @@ export const startServices = async (
 	appId: string,
 	services: string[],
 ): Promise<any> => {
+	logger.info('Starting services...');
+	console.debug(services);
 	return await Promise.all(services.map((m) => startService(appId, m)));
 };

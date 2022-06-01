@@ -10,6 +10,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     tmpfs:
       - /tmp
+    labels:
+      io.balena.features.supervisor-api: 1
+      io.balena.features.balena-socket: 1
     environment:
       BACKUP_CRON: ""
       # INCLUDE_VOLUMES: test-data-2
