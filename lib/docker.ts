@@ -34,20 +34,6 @@ export const executeInContainer = async (
 	command: string[],
 	opts: {},
 ): Promise<void> => {
-	console.debug('===================================================');
-	console.debug(
-		'image',
-		require('util').inspect(image, { depth: null, maxArrayLength: Infinity }),
-	);
-	console.debug(
-		'command',
-		require('util').inspect(command, { depth: null, maxArrayLength: Infinity }),
-	);
-	console.debug(
-		'opts',
-		require('util').inspect(opts, { depth: null, maxArrayLength: Infinity }),
-	);
-	console.debug('===================================================');
 	return docker
 		.run(image, command, process.stdout, opts)
 		.then(function (data) {

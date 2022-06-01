@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  sut:
+  volume-keeper:
     build: .
     labels:
       io.balena.features.supervisor-api: 1

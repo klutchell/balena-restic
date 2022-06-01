@@ -20,10 +20,7 @@ const checkStatus = (response: Response) => {
 	}
 };
 
-/**
- * This will return a list of images, containers, the overall download progress and the status of the state engine.
- * https://www.balena.io/docs/reference/supervisor/supervisor-api/#get-v2statestatus
- */
+// https://www.balena.io/docs/reference/supervisor/supervisor-api/#get-v2statestatus
 export const getStateStatus = async (): Promise<any> => {
 	return await fetch(
 		`${SUPERVISOR_ADDRESS}/v2/state/status?apikey=${SUPERVISOR_API_KEY}`,
@@ -82,4 +79,60 @@ export const getDeviceTags = async (): Promise<any> => {
 		.catch((err) => {
 			throw new Error(err);
 		});
+};
+
+// https://www.balena.io/docs/reference/supervisor/supervisor-api/#post-v2applicationsappidstop-service
+export const stopService = async (
+	appId: string,
+	serviceName: string,
+): Promise<any> => {
+	return await fetch(
+		`${SUPERVISOR_ADDRESS}/v2/applications/${appId}/stop-service?apikey=${SUPERVISOR_API_KEY}`,
+		{
+			method: 'post',
+			body: JSON.stringify({ serviceName }),
+			headers: { 'Content-Type': 'application/json' },
+		},
+	)
+		.then((response) => {
+			return checkStatus(response);
+		})
+		.catch((err) => {
+			throw new Error(err);
+		});
+};
+
+// https://www.balena.io/docs/reference/supervisor/supervisor-api/#post-v2applicationsappidstart-service
+export const startService = async (
+	appId: string,
+	serviceName: string,
+): Promise<any> => {
+	return await fetch(
+		`${SUPERVISOR_ADDRESS}/v2/applications/${appId}/start-service?apikey=${SUPERVISOR_API_KEY}`,
+		{
+			method: 'post',
+			body: JSON.stringify({ serviceName }),
+			headers: { 'Content-Type': 'application/json' },
+		},
+	)
+		.then((response) => {
+			return checkStatus(response);
+		})
+		.catch((err) => {
+			throw new Error(err);
+		});
+};
+
+export const stopServices = async (
+	appId: string,
+	services: string[],
+): Promise<any> => {
+	return await Promise.all(services.map((m) => stopService(appId, m)));
+};
+
+export const startServices = async (
+	appId: string,
+	services: string[],
+): Promise<any> => {
+	return await Promise.all(services.map((m) => startService(appId, m)));
 };

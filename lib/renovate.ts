@@ -7,7 +7,13 @@ import {
 	RESTIC_TAGS,
 	BIND_ROOT_PATH,
 } from './config';
-import { getDeviceName, getDeviceTags } from './supervisor';
+import {
+	getDeviceName,
+	getDeviceTags,
+	getStateStatus,
+	stopServices,
+	startServices,
+} from './supervisor';
 import { hostname } from 'os';
 import { VolumeInspectInfo, ContainerInspectInfo } from 'dockerode';
 import * as util from 'util';
@@ -74,27 +80,26 @@ const composedFilter = (project: string, info: VolumeInspectInfo): boolean => {
 };
 
 const getContainerOpts = async (
+	self: ContainerInspectInfo,
 	mode: 'ro' | 'rw' = 'ro',
 ): Promise<[string, {}]> => {
-	const self = await inspectSelf();
+	const resticVolumes = self.Mounts.filter((f) => f.Name);
 
-	const namedMounts = self.Mounts.filter((f) => f.Name);
-
-	const volumes = isSupervised(self)
+	const dataVolumes = isSupervised(self)
 		? await listVolumesFilter(supervisedFilter.bind(null, getAppId(self)))
 		: await listVolumesFilter(composedFilter.bind(null, getProjectName(self)));
 
-	if (volumes.length < 1) {
+	if (dataVolumes.length < 1) {
 		throw new Error(
-			'No volumes found! Check that volumes exist and have not be excluded.',
+			'No data volumes found! Check that volumes exist and have not be excluded.',
 		);
 	}
 
-	const binds: string[] = volumes
-		.filter((f) => !namedMounts.map((m) => m.Name).includes(f.Name))
+	const binds: string[] = dataVolumes
+		.filter((f) => !resticVolumes.map((m) => m.Name).includes(f.Name))
 		.map((m) => `${m.Name}:${BIND_ROOT_PATH}/${m.Name}:${mode}`)
 		.concat(
-			namedMounts.map(
+			resticVolumes.map(
 				(m) => `${m.Name}:${m.Destination}:${m.RW ? 'rw' : 'ro'}`,
 			),
 		);
@@ -117,7 +122,7 @@ const getContainerOpts = async (
 
 // https://restic.readthedocs.io/en/latest/040_backup.html
 export const doBackup = async (resticOpts: string[] = []): Promise<void> => {
-	const [image, containerOpts] = await getContainerOpts('ro'); // read-only
+	const self = await inspectSelf();
 
 	return execSync('restic init || true')
 		.then((out) => {
@@ -128,6 +133,9 @@ export const doBackup = async (resticOpts: string[] = []): Promise<void> => {
 			}
 		})
 		.then(() => {
+			return getContainerOpts(self, 'ro'); // read-only
+		})
+		.then(([image, opts]) => {
 			return executeInContainer(
 				image,
 				[
@@ -136,7 +144,7 @@ export const doBackup = async (resticOpts: string[] = []): Promise<void> => {
 					'--',
 					`restic backup ${BIND_ROOT_PATH} -vv ${resticOpts.join(' ')} | cat`,
 				],
-				containerOpts,
+				opts,
 			);
 		})
 		.then(() => {
@@ -155,20 +163,44 @@ export const doBackup = async (resticOpts: string[] = []): Promise<void> => {
 export const doRestore = async (
 	resticOpts: string[] = ['latest'],
 ): Promise<void> => {
-	const [image, containerOpts] = await getContainerOpts('rw'); // read-write
+	const self = await inspectSelf();
 
-	return executeInContainer(
-		image,
-		[
-			'sh',
-			'-c',
-			'--',
-			`restic restore --target=${BIND_ROOT_PATH} -vv ${resticOpts.join(
-				' ',
-			)} | cat`,
-		],
-		containerOpts,
-	);
+	let services = [];
+	let fnPre = (..._args: any) => Promise.resolve();
+	let fnPost = (..._args: any) => Promise.resolve();
+
+	if (isSupervised(self)) {
+		services = await getStateStatus().then((state) =>
+			state.containers
+				.filter((f: any) => f.containerId !== self.Id)
+				.map((m: any) => m.serviceName),
+		);
+
+		fnPre = stopServices.bind(null, getAppId(self), services);
+		fnPost = startServices.bind(null, getAppId(self), services);
+	}
+
+	return fnPre()
+		.then(() => {
+			return getContainerOpts(self, 'rw'); // read-write
+		})
+		.then(([image, opts]) => {
+			return executeInContainer(
+				image,
+				[
+					'sh',
+					'-c',
+					'--',
+					`restic restore --target=${BIND_ROOT_PATH} -vv ${resticOpts.join(
+						' ',
+					)} | cat`,
+				],
+				opts,
+			);
+		})
+		.then(() => {
+			return fnPost();
+		});
 };
 
 // https://restic.readthedocs.io/en/latest/060_forget.html
