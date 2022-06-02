@@ -3,40 +3,15 @@ import {
 	INCLUDE_VOLUMES,
 	EXCLUDE_VOLUMES,
 	RESTIC_ENV_VARS,
-	RESTIC_HOST,
-	RESTIC_TAGS,
 	BIND_ROOT_PATH,
 } from './config';
-import {
-	getDeviceName,
-	getDeviceTags,
-	getStateStatus,
-	stopServices,
-	startServices,
-} from './supervisor';
-import { hostname } from 'os';
+import { getStateStatus, stopServices, startServices } from './supervisor';
 import { VolumeInspectInfo, ContainerInspectInfo } from 'dockerode';
-import * as util from 'util';
+import { promisify } from 'util';
 import { exec } from 'child_process';
 import { logger } from './logger';
 
-const execSync = util.promisify(exec);
-
-export const getHost = async (): Promise<string> => {
-	return getDeviceName()
-		.then((data) => data.deviceName)
-		.catch((_err) => RESTIC_HOST || hostname());
-};
-
-export const getTags = async (): Promise<string> => {
-	return getDeviceTags()
-		.then((data) =>
-			data.tags
-				.map((m: any) => (m.value ? `${m.name}=${m.value}` : m.name))
-				.join(','),
-		)
-		.catch((_err) => RESTIC_TAGS || '');
-};
+const execSync = promisify(exec);
 
 const isSupervised = (info: ContainerInspectInfo): boolean => {
 	return (
@@ -213,14 +188,14 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 
 // https://restic.readthedocs.io/en/latest/060_forget.html
 export const doPrune = async (args: string[] = []): Promise<void> => {
-	return execSync(
-		`restic forget --prune --group-by=paths,tags ${args.join(' ')} -vv | cat`,
-	).then(({ stdout, stderr }) => {
-		if (stdout) {
-			console.log(stdout);
-		}
-		if (stderr) {
-			console.error(stderr);
-		}
-	});
+	return execSync(`restic forget --prune -vv ${args.join(' ')} | cat`).then(
+		({ stdout, stderr }) => {
+			if (stdout) {
+				console.log(stdout);
+			}
+			if (stderr) {
+				console.error(stderr);
+			}
+		},
+	);
 };
