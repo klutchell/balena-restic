@@ -18,6 +18,7 @@ services:
       # INCLUDE_VOLUMES: test-data-2
       EXCLUDE_VOLUMES: test-data-1
       RESTIC_PASSWORD: balena
+      LOG_LEVEL: debug
     depends_on:
       - test-service-1
       - test-service-2

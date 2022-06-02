@@ -7,17 +7,14 @@ export const SUPERVISOR_API_KEY = process.env.BALENA_SUPERVISOR_API_KEY;
 
 export const BIND_ROOT_PATH = '/data';
 
-export const RESTIC_HOST = process.env.RESTIC_HOST;
-export const RESTIC_TAGS = process.env.RESTIC_TAGS;
+export const BACKUP_OPTS = process.env.BACKUP_OPTS?.split(/\s+/) || [];
 
-export const BACKUP_OPTS = process.env.RESTIC_BACKUP_OPTS?.split(/\s+/) || [];
-
-export const PRUNE_OPTS = process.env.RESTIC_PRUNE_OPTS?.split(/\s+/) || [
+export const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
 	'--keep-hourly=24',
 	'--keep-daily=7',
 	'--keep-weekly=5',
 	'--keep-monthly=12',
-	'--group-by=paths,tags',
+	'--group-by=hosts,tags',
 ];
 
 export const DRY_RUN = boolean(process.env.DRY_RUN) ? '--dry-run' : '';

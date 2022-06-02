@@ -67,7 +67,7 @@ and execute the following command(s):
 
 ```bash
 # list existing snapshots
-restic snapshots
+restic snapshots --group-by=hosts,tags
 
 # restore a specific snapshot id or 'latest'
 npm run restore 4bba301e
@@ -84,7 +84,7 @@ and execute the following command(s):
 
 ```bash
 # forget (prune) snapshots following your choice of policy
-npm run prune --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 75 --dry-run
+npm run prune --keep-daily=7 --keep-weekly=5 --keep-monthly=12 --keep-yearly=75 --dry-run
 ```
 
 See all the available forget (prune) options here: <https://restic.readthedocs.io/en/latest/060_forget.html>
