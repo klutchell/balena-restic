@@ -1,0 +1,19 @@
+name: volume-keeper
+type: sw.block
+version: 0.0.0
+description: >-
+  Rest easy knowing that your application data volumes are automatically and securely backed up to local or cloud storage!
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/klutchell/volume-keeper'
+data:
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+    - genericx86-64-ext
+    - intel-nuc
+    - fincm3
