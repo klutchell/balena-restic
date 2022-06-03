@@ -41,7 +41,7 @@
     "@balena/lint": "5.4.2",
     "@types/chai": "4.3.1",
     "@types/chai-as-promised": "7.1.5",
-    "@types/dockerode": "3.3.8",
+    "@types/dockerode": "3.3.9",
     "@types/lodash": "4.14.182",
     "@types/mocha": "8.2.3",
     "@types/node-cron": "3.0.1",
