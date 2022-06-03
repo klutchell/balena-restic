@@ -6,23 +6,24 @@ RUN apk add --no-cache dumb-init restic && \
 
 WORKDIR /app
 
-FROM base AS deps
+FROM base AS dev
 
 COPY *.json ./
 
 RUN npm ci
 
-FROM deps as lib
+FROM dev as build
 
 COPY lib/ lib/
 
 RUN npm run build
 
-FROM base AS final
+FROM base AS prod
 
-COPY --from=deps /app/package.json /app/package.json
-COPY --from=deps /app/node_modules /app/node_modules
-COPY --from=lib /app/build /app/build
+COPY --from=build /app/package.json /app/package-lock.json ./
+COPY --from=build /app/build /app/build
+
+RUN npm ci --production
 
 CMD [ "dumb-init", "node", "/app/build/index.js" ]
 
@@ -31,5 +32,3 @@ ENV BACKUP_CRON "0 */8 * * *"
 
 ENV RESTIC_REPOSITORY "/snapshots"
 ENV RESTIC_CACHE_DIR "/cache"
-
-VOLUME /snapshots
