@@ -19,7 +19,7 @@ import { logger } from './logger';
 
 const execSync = promisify(exec);
 
-export const getHost = async (): Promise<string> => {
+const getHost = async (): Promise<string> => {
 	return process.env.HOST
 		? Promise.resolve('--host=' + process.env.HOST)
 		: getDeviceName()
