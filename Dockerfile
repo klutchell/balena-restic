@@ -1,4 +1,4 @@
-FROM node:17-alpine AS base
+FROM node:18-alpine AS base
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache dumb-init restic && \
