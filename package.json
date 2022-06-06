@@ -39,7 +39,7 @@
     "list-snapshots": "node build/list-snapshots.js"
   },
   "devDependencies": {
-    "@balena/lint": "5.4.2",
+    "@balena/lint": "6.2.0",
     "@types/chai": "4.3.1",
     "@types/chai-as-promised": "7.1.5",
     "@types/dockerode": "3.3.9",
