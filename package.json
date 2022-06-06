@@ -35,7 +35,8 @@
     "start": "node build/index.js",
     "backup": "node build/backup.js",
     "restore": "node build/restore.js",
-    "prune": "node build/prune.js"
+    "prune": "node build/prune.js",
+    "list-snapshots": "node build/list-snapshots.js"
   },
   "devDependencies": {
     "@balena/lint": "5.4.2",
