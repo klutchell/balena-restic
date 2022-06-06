@@ -4,13 +4,13 @@ import {
 	EXCLUDE_VOLUMES,
 	RESTIC_ENV_VARS,
 	BIND_ROOT_PATH,
+	TAGS,
 } from './config';
 import {
 	getStateStatus,
 	stopServices,
 	startServices,
 	getDeviceName,
-	getDeviceTags,
 } from './supervisor';
 import { VolumeInspectInfo, ContainerInspectInfo } from 'dockerode';
 import { promisify } from 'util';
@@ -24,20 +24,6 @@ export const getHost = async (): Promise<string> => {
 		? Promise.resolve('--host=' + process.env.HOST)
 		: getDeviceName()
 				.then((data) => '--host=' + data.deviceName)
-				.catch((_err) => '');
-};
-
-export const getTags = async (): Promise<string> => {
-	return process.env.TAGS
-		? Promise.resolve('--tag=' + process.env.TAGS)
-		: getDeviceTags()
-				.then(
-					(data) =>
-						'--tag=' +
-						data.tags
-							.map((m: any) => (m.value ? `${m.name}=${m.value}` : m.name))
-							.join(','),
-				)
 				.catch((_err) => '');
 };
 
@@ -135,17 +121,14 @@ const getContainerOpts = async (
 export const doBackup = async (args: string[] = []): Promise<void> => {
 	const self = await inspectSelf();
 
+	// do not append default HOST if --host is provided as an arg
 	if (!args.find((f) => f.startsWith('--host'))) {
 		await getHost().then((host: string) => host && args.push(host));
 	}
 
-	if (!args.find((f) => f.startsWith('--tag'))) {
-		await getTags().then((tags: string) => tags && args.push(tags));
-	}
-
-	logger.debug('Using args:');
-	if (logger.isDebugEnabled()) {
-		console.debug(args);
+	// if tags are provided append them to the command as they are additive
+	if (TAGS) {
+		args.push(TAGS);
 	}
 
 	return execSync('restic init || true')
@@ -178,17 +161,14 @@ export const doBackup = async (args: string[] = []): Promise<void> => {
 export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 	const self = await inspectSelf();
 
+	// do not append default HOST if --host is provided as an arg
 	if (!args.find((f) => f.startsWith('--host'))) {
 		await getHost().then((host: string) => host && args.push(host));
 	}
 
-	if (!args.find((f) => f.startsWith('--tag'))) {
-		await getTags().then((tags: string) => tags && args.push(tags));
-	}
-
-	logger.debug('Using args:');
-	if (logger.isDebugEnabled()) {
-		console.debug(args);
+	// if tags are provided append them to the command as they are additive
+	if (TAGS) {
+		args.push(TAGS);
 	}
 
 	let services = [];
@@ -233,17 +213,14 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 export const doPrune = async (args: string[] = []): Promise<void> => {
 	logger.info('Pruning snapshot(s)...');
 
+	// do not append default HOST if --host is provided as an arg
 	if (!args.find((f) => f.startsWith('--host'))) {
 		await getHost().then((host: string) => host && args.push(host));
 	}
 
-	if (!args.find((f) => f.startsWith('--tag'))) {
-		await getTags().then((tags: string) => tags && args.push(tags));
-	}
-
-	logger.debug('Using args:');
-	if (logger.isDebugEnabled()) {
-		console.debug(args);
+	// if tags are provided append them to the command as they are additive
+	if (TAGS) {
+		args.push(TAGS);
 	}
 
 	return execSync(`restic forget --prune -vv ${args.join(' ')} | cat`).then(
@@ -262,17 +239,14 @@ export const doPrune = async (args: string[] = []): Promise<void> => {
 export const doListSnapshots = async (args: string[] = []): Promise<void> => {
 	logger.info('Listing snapshots...');
 
+	// do not append default HOST if --host is provided as an arg
 	if (!args.find((f) => f.startsWith('--host'))) {
 		await getHost().then((host: string) => host && args.push(host));
 	}
 
-	if (!args.find((f) => f.startsWith('--tag'))) {
-		await getTags().then((tags: string) => tags && args.push(tags));
-	}
-
-	logger.debug('Using args:');
-	if (logger.isDebugEnabled()) {
-		console.debug(args);
+	// if tags are provided append them to the command as they are additive
+	if (TAGS) {
+		args.push(TAGS);
 	}
 
 	return execSync(

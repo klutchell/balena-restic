@@ -3,7 +3,6 @@ version: "2"
 services:
   sut:
     build: .
-    # volumes added here are automatically excluded from backups
     volumes:
       - cache:/cache
       - snapshots:/snapshots
@@ -19,6 +18,8 @@ services:
       EXCLUDE_VOLUMES: test-data-1
       RESTIC_PASSWORD: balena
       LOG_LEVEL: debug
+      TAGS: foo=bar
+      HOST: foobar
     depends_on:
       - test-service-1
       - test-service-2

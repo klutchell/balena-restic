@@ -7,9 +7,14 @@ export const SUPERVISOR_API_KEY = process.env.BALENA_SUPERVISOR_API_KEY;
 
 export const BIND_ROOT_PATH = '/data';
 
-export const BACKUP_OPTS = process.env.BACKUP_OPTS?.split(/\s+/) || [];
+export const TAGS = process.env.TAGS ? `--tag=${process.env.TAGS}` : '';
+
+export const BACKUP_OPTS = process.env.BACKUP_OPTS?.split(/\s+/) || [
+	'--tag=scheduled',
+];
 
 export const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
+	'--tag=scheduled',
 	'--keep-hourly=24',
 	'--keep-daily=7',
 	'--keep-weekly=5',
