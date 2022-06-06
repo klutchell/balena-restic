@@ -47,7 +47,6 @@
     "@types/mocha": "8.2.3",
     "@types/node-cron": "3.0.1",
     "@types/node-fetch": "2.6.1",
-    "@types/winston": "2.4.4",
     "chai": "4.3.6",
     "chai-as-promised": "7.1.1",
     "husky": "4.3.8",
