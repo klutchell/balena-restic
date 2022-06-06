@@ -1,4 +1,4 @@
-FROM node:17-alpine AS base
+FROM node:18-alpine AS base
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache dumb-init restic && \
@@ -23,7 +23,7 @@ FROM base AS prod
 COPY --from=build /app/package.json /app/package-lock.json ./
 COPY --from=build /app/build /app/build
 
-RUN npm ci --production
+RUN npm ci --omit=dev
 
 CMD [ "dumb-init", "node", "/app/build/index.js" ]
 
