@@ -4,28 +4,20 @@ import {
 	EXCLUDE_VOLUMES,
 	RESTIC_ENV_VARS,
 	BIND_ROOT_PATH,
-	TAGS,
+	TMPDIR,
+	LIST_OPTS,
+	BACKUP_OPTS,
+	RESTORE_OPTS,
+	PRUNE_OPTS,
 } from './config';
-import {
-	getStateStatus,
-	stopServices,
-	startServices,
-	getDeviceName,
-} from './supervisor';
+import { getStateStatus, stopServices, startServices } from './supervisor';
 import { VolumeInspectInfo, ContainerInspectInfo } from 'dockerode';
 import { promisify } from 'util';
 import { exec } from 'child_process';
 import { logger } from './logger';
+import { boolean } from 'boolean';
 
 const execSync = promisify(exec);
-
-const getHost = async (): Promise<string> => {
-	return process.env.HOST
-		? Promise.resolve('--host=' + process.env.HOST)
-		: getDeviceName()
-				.then((data) => '--host=' + data.deviceName)
-				.catch((_err) => '');
-};
 
 const isSupervised = (info: ContainerInspectInfo): boolean => {
 	return (
@@ -73,13 +65,17 @@ const getContainerOpts = async (
 	self: ContainerInspectInfo,
 	mode: 'ro' | 'rw' = 'ro',
 ): Promise<[string, {}]> => {
-	const resticVolumes = self.Mounts.filter((f) => f.Name);
+	// mounted volumes are named volumes mounted on this container that
+	// will be copied to the restic container and excluded from backups
+	const mountedVolumes = self.Mounts.filter((f) => f.Name);
 
+	// data volumes are locally discovered volumes that are not directly
+	// mount on the volume-keeper container as filtered above
 	const dataVolumes = (
 		isSupervised(self)
 			? await listVolumesFilter(supervisedFilter.bind(null, getAppId(self)))
 			: await listVolumesFilter(composedFilter.bind(null, getProjectName(self)))
-	).filter((f) => !resticVolumes.map((m) => m.Name).includes(f.Name));
+	).filter((f) => !mountedVolumes.map((m) => m.Name).includes(f.Name));
 
 	if (dataVolumes.length < 1) {
 		logger.error(
@@ -95,7 +91,7 @@ const getContainerOpts = async (
 	const binds: string[] = dataVolumes
 		.map((m) => `${m.Name}:${BIND_ROOT_PATH}/${m.Name}:${mode}`)
 		.concat(
-			resticVolumes.map(
+			mountedVolumes.map(
 				(m) => `${m.Name}:${m.Destination}:${m.RW ? 'rw' : 'ro'}`,
 			),
 		);
@@ -111,25 +107,50 @@ const getContainerOpts = async (
 			NetworkMode: 'host',
 			AutoRemove: true,
 			Binds: binds,
+			Tmpfs: { [TMPDIR]: 'rw,noexec,nosuid' },
 		},
 	};
 
 	return [self.Image, opts];
 };
 
+const checkRepoPath = (self: ContainerInspectInfo): void => {
+	if (
+		process.env.RESTIC_REPOSITORY &&
+		!/.+:.+/.test(process.env.RESTIC_REPOSITORY) &&
+		!self.Mounts.find((f) => f.Destination === process.env.RESTIC_REPOSITORY)
+	) {
+		logger.error('RESTIC_REPOSITORY path must be mounted as a volume!');
+		process.exit(1);
+	}
+};
+
+const prependExtraArgs = (args: string[], extra: string[]): string[] => {
+	// prepend the host arg as the last will always take priority
+	if (process.env.HOST) {
+		extra.unshift(`--host=${process.env.HOST}`);
+	}
+
+	// if tags are provided prepend them as they are additive
+	if (process.env.TAGS) {
+		extra.unshift(`--tag=${process.env.TAGS}`);
+	}
+
+	// put dry-run at the front of the extra args
+	if (boolean(process.env.DRY_RUN)) {
+		extra.unshift('--dry-run');
+	}
+
+	// give the passed-in args the highest priority by appending them last
+	return extra.concat(args);
+};
+
 // https://restic.readthedocs.io/en/latest/040_backup.html
 export const doBackup = async (args: string[] = []): Promise<void> => {
 	const self = await inspectSelf();
 
-	// do not append default HOST if --host is provided as an arg
-	if (!args.find((f) => f.startsWith('--host'))) {
-		await getHost().then((host: string) => host && args.push(host));
-	}
-
-	// if tags are provided append them to the command as they are additive
-	if (TAGS) {
-		args.push(TAGS);
-	}
+	checkRepoPath(self);
+	args = prependExtraArgs(args, BACKUP_OPTS);
 
 	return execSync('restic init || true')
 		.then(({ stdout, stderr }) => {
@@ -161,15 +182,8 @@ export const doBackup = async (args: string[] = []): Promise<void> => {
 export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 	const self = await inspectSelf();
 
-	// do not append default HOST if --host is provided as an arg
-	if (!args.find((f) => f.startsWith('--host'))) {
-		await getHost().then((host: string) => host && args.push(host));
-	}
-
-	// if tags are provided append them to the command as they are additive
-	if (TAGS) {
-		args.push(TAGS);
-	}
+	checkRepoPath(self);
+	args = prependExtraArgs(args, RESTORE_OPTS);
 
 	let services = [];
 	let fnPre = (..._args: any) => Promise.resolve();
@@ -211,18 +225,9 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 
 // https://restic.readthedocs.io/en/latest/060_forget.html
 export const doPrune = async (args: string[] = []): Promise<void> => {
+	args = prependExtraArgs(args, PRUNE_OPTS);
+
 	logger.info('Pruning snapshot(s)...');
-
-	// do not append default HOST if --host is provided as an arg
-	if (!args.find((f) => f.startsWith('--host'))) {
-		await getHost().then((host: string) => host && args.push(host));
-	}
-
-	// if tags are provided append them to the command as they are additive
-	if (TAGS) {
-		args.push(TAGS);
-	}
-
 	return execSync(`restic forget --prune -vv ${args.join(' ')} | cat`).then(
 		({ stdout, stderr }) => {
 			if (stdout) {
@@ -237,26 +242,17 @@ export const doPrune = async (args: string[] = []): Promise<void> => {
 
 // https://restic.readthedocs.io/en/latest/045_working_with_repos.html#listing-all-snapshots
 export const doListSnapshots = async (args: string[] = []): Promise<void> => {
+	args = prependExtraArgs(args, LIST_OPTS).filter((f) => f !== '--dry-run');
+
 	logger.info('Listing snapshots...');
-
-	// do not append default HOST if --host is provided as an arg
-	if (!args.find((f) => f.startsWith('--host'))) {
-		await getHost().then((host: string) => host && args.push(host));
-	}
-
-	// if tags are provided append them to the command as they are additive
-	if (TAGS) {
-		args.push(TAGS);
-	}
-
-	return execSync(
-		`restic snapshots --group-by=hosts,tags ${args.join(' ')} | cat`,
-	).then(({ stdout, stderr }) => {
-		if (stdout) {
-			console.log(stdout);
-		}
-		if (stderr) {
-			console.error(stderr);
-		}
-	});
+	return execSync(`restic snapshots ${args.join(' ')} | cat`).then(
+		({ stdout, stderr }) => {
+			if (stdout) {
+				console.log(stdout);
+			}
+			if (stderr) {
+				console.error(stderr);
+			}
+		},
+	);
 };
