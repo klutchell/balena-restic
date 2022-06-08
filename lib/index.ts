@@ -25,7 +25,7 @@ if (BACKUP_CRON) {
 		return doBackup(args)
 			.then(() => doPrune(args))
 			.then(() => {
-				doListSnapshots();
+				doListSnapshots(args);
 			});
 	});
 }
