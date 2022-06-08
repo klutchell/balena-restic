@@ -126,16 +126,6 @@ const checkRepoPath = (self: ContainerInspectInfo): void => {
 };
 
 const prependExtraArgs = (args: string[], extra: string[]): string[] => {
-	// prepend the host arg as the last will always take priority
-	if (process.env.HOST) {
-		extra.unshift(`--host=${process.env.HOST}`);
-	}
-
-	// if tags are provided prepend them as they are additive
-	if (process.env.TAGS) {
-		extra.unshift(`--tag=${process.env.TAGS}`);
-	}
-
 	// put dry-run at the front of the extra args
 	if (boolean(process.env.DRY_RUN)) {
 		extra.unshift('--dry-run');

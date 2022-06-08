@@ -60,8 +60,6 @@ services:
 | `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                                                          |
 | `LIST_OPTS`         | Extra arguments to pass to the [list-snapshots](#list-snapshots) command.                                                                                                        |
 | `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                                                                      |
-| `HOST`              | Override the host value for all supported commands. If unset the device name or hostname will be used.                                                                           |
-| `TAGS`              | Extra tags to apply to all supported commands.                                                                                                                                   |
 | `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                                                               |
 
 All restic environment variables are outlined [in their documentation](https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables).
