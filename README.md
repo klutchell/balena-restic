@@ -15,66 +15,54 @@ Rest easy knowing that your application data volumes are automatically and secur
 To use this image, add a service in your `docker-compose.yml` file as shown below.
 
 ```yml
-version: "2"
-
-volumes:
-  cache:
-  backups:
-
 services:
+  ...
   volume-keeper:
     # where <arch> is one of aarch64, armv7hf or amd64
     image: bh.cr/gh_klutchell/volume-keeper-<arch>
     labels:
       io.balena.features.supervisor-api: 1
       io.balena.features.balena-socket: 1
-    # note that any volumes added here are not eligible for backup
-    # instead the eligible backup volumes are mounted automatically
     volumes:
-      - cache:/cache
-      - snapshots:/snapshots
+      - cache:/cache # recommended for performance
+      - snapshots:/snapshots # only required if RESTIC_REPOSITORY is unset
 ```
 
 To pin to a specific version of this block use:
 
 ```yml
-version: "2"
-
-volumes:
-  cache:
-  backups:
-
 services:
+  ...
   volume-keeper:
     # where <version> is the release semver or release commit ID
     image: bh.cr/gh_klutchell/volume-keeper-<arch>/<version>
     labels:
       io.balena.features.supervisor-api: 1
       io.balena.features.balena-socket: 1
-    # note that any volumes added here are not eligible for backup
-    # instead the eligible backup volumes are mounted automatically
     volumes:
-      - cache:/cache
-      - snapshots:/snapshots
+      - cache:/cache # recommended for performance
+      - snapshots:/snapshots # only required if RESTIC_REPOSITORY is unset
 ```
 
 ## Customization
 
 ### Environment Variables
 
-| Name                | Description                                                                                                                                                                                |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `RESTIC_REPOSITORY` | [Repository](https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html) for encrypted snapshots. Defaults to a local volume but offsite cloud storage is strongly recommended! |
-| `RESTIC_PASSWORD`   | Repository password for encrypted snapshots. Do not change this unless you are starting a new repository!                                                                                  |
-| `BACKUP_CRON`       | Cron schedule for creating backups. See [this page](https://crontab.guru/examples.html) for examples. Default is every 8 hours.                                                            |
-| `TZ`                | The timezone in your location. Find a [list of all timezone values here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).                                                    |
-| `INCLUDE_VOLUMES`   | Named volumes to include in backups. Default is all local volumes.                                                                                                                         |
-| `EXCLUDE_VOLUMES`   | Named volumes to exclude from backups. Default is none.                                                                                                                                    |
-| `BACKUP_OPTS`       | Arguments to pass to the scheduled backup command. Defaults to `--tag=scheduled`.                                                                                                          |
-| `PRUNE_OPTS`        | Arguments to pass to the scheduled prune command. Defaults to `--tag=scheduled --keep-hourly=24 --keep-daily=7 --keep-weekly=5 --keep-monthly=12 --group-by=hosts,tags`.                   |
-| `HOST`              | Set a preferred `--host` value for all commands. Defaults to the device name if supervised, or the hostname if standalone.                                                                 |
-| `TAGS`              | Set a preferred `--tag` value for all commands.                                                                                                                                            |
-| `DRY_RUN`           | Set to a true to add the `--dry-run` flag to all supported scheduled actions.                                                                                                              |
+| Name                | Description                                                                                                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RESTIC_REPOSITORY` | [Repository](https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html) for encrypted snapshots. Defaults to `/snapshots` but cloud storage is strongly recommended! |
+| `RESTIC_PASSWORD`   | Repository password for encrypted snapshots. Do not change this unless you are starting a new repository!                                                                        |
+| `BACKUP_CRON`       | Cron schedule for creating backups. See [this page](https://crontab.guru/examples.html) for examples. Default is every 8 hours.                                                  |
+| `TZ`                | The timezone in your location. Find a [list of all timezone values here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).                                          |
+| `INCLUDE_VOLUMES`   | Named volumes to include in backups. Default is all local volumes.                                                                                                               |
+| `EXCLUDE_VOLUMES`   | Named volumes to exclude from backups.                                                                                                                                           |
+| `BACKUP_OPTS`       | Extra arguments to pass to the [backup](#backup) command.                                                                                                                        |
+| `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                                                          |
+| `LIST_OPTS`         | Extra arguments to pass to the [list-snapshots](#list-snapshots) command.                                                                                                        |
+| `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                                                                      |
+| `HOST`              | Override the host value for all supported commands. If unset the device name or hostname will be used.                                                                           |
+| `TAGS`              | Extra tags to apply to all supported commands.                                                                                                                                   |
+| `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                                                               |
 
 All restic environment variables are outlined [in their documentation](https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables).
 

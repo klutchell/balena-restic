@@ -1,20 +1,30 @@
-import { boolean } from 'boolean';
+import { logger } from './logger';
 
-export const BACKUP_CRON = process.env.BACKUP_CRON;
+if (!process.env.RESTIC_REPOSITORY) {
+	logger.error('RESTIC_REPOSITORY must be set in the environment!');
+	process.exit(1);
+}
+
+if (!process.env.RESTIC_PASSWORD) {
+	logger.error('RESTIC_PASSWORD must be set in the environment!');
+	process.exit(1);
+}
+
+if (!process.env.RESTIC_CACHE_DIR) {
+	logger.error('RESTIC_CACHE_DIR must be set in the environment!');
+	process.exit(1);
+}
 
 export const SUPERVISOR_ADDRESS = process.env.BALENA_SUPERVISOR_ADDRESS;
 export const SUPERVISOR_API_KEY = process.env.BALENA_SUPERVISOR_API_KEY;
 
-export const BIND_ROOT_PATH = '/data';
+export const BIND_ROOT_PATH = process.env.BIND_ROOT_PATH || '/data';
 
-export const TAGS = process.env.TAGS ? `--tag=${process.env.TAGS}` : '';
+export const TMPDIR = process.env.TMPDIR || '/tmp';
 
-export const BACKUP_OPTS = process.env.BACKUP_OPTS?.split(/\s+/) || [
-	'--tag=scheduled',
-];
+export const BACKUP_OPTS = process.env.BACKUP_OPTS?.split(/\s+/) || [];
 
 export const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
-	'--tag=scheduled',
 	'--keep-hourly=24',
 	'--keep-daily=7',
 	'--keep-weekly=5',
@@ -22,7 +32,13 @@ export const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
 	'--group-by=hosts,tags',
 ];
 
-export const DRY_RUN = boolean(process.env.DRY_RUN) ? '--dry-run' : '';
+export const LIST_OPTS = process.env.LIST_OPTS?.split(/\s+/) || [
+	'--group-by=hosts,tags',
+];
+
+export const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [
+	'--group-by=hosts,tags',
+];
 
 export const INCLUDE_VOLUMES =
 	process.env.INCLUDE_VOLUMES?.split(/[\s,;]+/) || [];
