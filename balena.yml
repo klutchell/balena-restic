@@ -1,6 +1,6 @@
 name: volume-keeper
 type: sw.block
-version: 0.0.6
+version: 0.0.7
 description: >-
   Rest easy knowing that your application data volumes are automatically and
   securely backed up to local or cloud storage!
