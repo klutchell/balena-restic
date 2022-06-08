@@ -25,10 +25,8 @@ export const executeInContainer = async (
 	command: string[],
 	opts: {},
 ): Promise<void> => {
-	logger.debug('Executing command:');
-	if (logger.isDebugEnabled()) {
-		console.debug(command);
-	}
+	logger.info('Running container...');
+	logger.debug(JSON.stringify(opts, null, 3));
 	return (
 		docker
 			.run(image, command, process.stdout, { ...opts, Tty: true })

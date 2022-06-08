@@ -101,7 +101,7 @@ export const stopServices = async (
 	services: string[],
 ): Promise<any> => {
 	logger.info('Stopping services...');
-	console.debug(services);
+	logger.debug(JSON.stringify(services, null, 3));
 	return await Promise.all(services.map((m) => stopService(appId, m)));
 };
 
@@ -110,6 +110,6 @@ export const startServices = async (
 	services: string[],
 ): Promise<any> => {
 	logger.info('Starting services...');
-	console.debug(services);
+	logger.debug(JSON.stringify(services, null, 3));
 	return await Promise.all(services.map((m) => startService(appId, m)));
 };

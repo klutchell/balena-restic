@@ -65,6 +65,8 @@ const getContainerOpts = async (
 	self: ContainerInspectInfo,
 	mode: 'ro' | 'rw' = 'ro',
 ): Promise<[string, {}]> => {
+	logger.info('Searching for eligible volumes...');
+
 	// mounted volumes are named volumes mounted on this container that
 	// will be copied to the restic container and excluded from backups
 	const mountedVolumes = self.Mounts.filter((f) => f.Name);
@@ -83,10 +85,13 @@ const getContainerOpts = async (
 		);
 	}
 
-	logger.debug('Found eligible volumes:');
-	if (logger.isDebugEnabled()) {
-		console.debug(dataVolumes.map((m) => m.Name));
-	}
+	logger.debug(
+		JSON.stringify(
+			dataVolumes.map((m) => m.Name),
+			null,
+			3,
+		),
+	);
 
 	const binds: string[] = dataVolumes
 		.map((m) => `${m.Name}:${BIND_ROOT_PATH}/${m.Name}:${mode}`)
@@ -142,29 +147,14 @@ export const doBackup = async (args: string[] = []): Promise<void> => {
 	checkRepoPath(self);
 	args = prependExtraArgs(args, BACKUP_OPTS);
 
-	return execSync('restic init || true')
-		.then(({ stdout, stderr }) => {
-			if (stdout) {
-				console.log(stdout);
-			}
-			if (stderr) {
-				// console.error(stderr);
-			}
-		})
-		.then(() => {
-			return getContainerOpts(self, 'ro'); // read-only
-		})
+	return getContainerOpts(self, 'ro') // read-only
 		.then(([image, opts]) => {
-			return executeInContainer(
-				image,
-				[
-					'sh',
-					'-c',
-					'--',
-					`restic backup ${BIND_ROOT_PATH} -vv ${args.join(' ')} | cat`,
-				],
-				opts,
-			);
+			const cmd = `restic init 2>/dev/null ; restic backup ${BIND_ROOT_PATH} -vv ${args.join(
+				' ',
+			)} | cat`;
+			logger.info('Creating snapshot...');
+			logger.debug(cmd);
+			return executeInContainer(image, ['sh', '-c', '--', cmd], opts);
 		});
 };
 
@@ -195,18 +185,12 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 			return getContainerOpts(self, 'rw'); // read-write
 		})
 		.then(([image, opts]) => {
-			return executeInContainer(
-				image,
-				[
-					'sh',
-					'-c',
-					'--',
-					`restic restore --target=${BIND_ROOT_PATH} -vv ${args.join(
-						' ',
-					)} | cat`,
-				],
-				opts,
-			);
+			const cmd = `restic restore --target=${BIND_ROOT_PATH} -vv ${args.join(
+				' ',
+			)} | cat`;
+			logger.info('Restoring snapshot...');
+			logger.debug(cmd);
+			return executeInContainer(image, ['sh', '-c', '--', cmd], opts);
 		})
 		.then(() => {
 			return fnPost();
@@ -217,32 +201,36 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 export const doPrune = async (args: string[] = []): Promise<void> => {
 	args = prependExtraArgs(args, PRUNE_OPTS);
 
-	logger.info('Pruning snapshot(s)...');
-	return execSync(`restic forget --prune -vv ${args.join(' ')} | cat`).then(
-		({ stdout, stderr }) => {
-			if (stdout) {
-				console.log(stdout);
-			}
-			if (stderr) {
-				console.error(stderr);
-			}
-		},
-	);
+	const cmd = `restic forget --prune -vv ${args.join(' ')} | cat`;
+
+	logger.info('Pruning snapshots...');
+	logger.debug(cmd);
+
+	return execSync(cmd).then(({ stdout, stderr }) => {
+		if (stdout) {
+			console.log(stdout);
+		}
+		if (stderr) {
+			console.error(stderr);
+		}
+	});
 };
 
 // https://restic.readthedocs.io/en/latest/045_working_with_repos.html#listing-all-snapshots
 export const doListSnapshots = async (args: string[] = []): Promise<void> => {
 	args = prependExtraArgs(args, LIST_OPTS).filter((f) => f !== '--dry-run');
 
+	const cmd = `restic snapshots ${args.join(' ')} | cat`;
+
 	logger.info('Listing snapshots...');
-	return execSync(`restic snapshots ${args.join(' ')} | cat`).then(
-		({ stdout, stderr }) => {
-			if (stdout) {
-				console.log(stdout);
-			}
-			if (stderr) {
-				console.error(stderr);
-			}
-		},
-	);
+	logger.debug(cmd);
+
+	return execSync(cmd).then(({ stdout, stderr }) => {
+		if (stdout) {
+			console.log(stdout);
+		}
+		if (stderr) {
+			console.error(stderr);
+		}
+	});
 };
