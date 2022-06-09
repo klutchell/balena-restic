@@ -58,7 +58,6 @@ services:
 | `EXCLUDE_VOLUMES`   | Named volumes to exclude from backups.                                                                                                                                           |
 | `BACKUP_OPTS`       | Extra arguments to pass to the [backup](#backup) command.                                                                                                                        |
 | `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                                                          |
-| `LIST_OPTS`         | Extra arguments to pass to the [list-snapshots](#list-snapshots) command.                                                                                                        |
 | `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                                                                      |
 | `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                                                               |
 
@@ -85,7 +84,7 @@ and execute the following command(s):
 
 ```bash
 # list snapshots with optional args
-npm run list-snapshots --group-by=hosts,tags
+restic snapshots --group-by=hosts,tags
 ```
 
 See all the available filter options here: <https://restic.readthedocs.io/en/latest/045_working_with_repos.html#listing-all-snapshots>

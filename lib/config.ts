@@ -32,10 +32,6 @@ export const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
 	'--group-by=hosts,tags',
 ];
 
-export const LIST_OPTS = process.env.LIST_OPTS?.split(/\s+/) || [
-	'--group-by=hosts,tags',
-];
-
 export const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [
 	'--group-by=hosts,tags',
 ];
