@@ -1,5 +1,5 @@
 import { schedule } from 'node-cron';
-import { doBackup, doPrune, doListSnapshots } from './renovate';
+import { doBackup, doPrune } from './renovate';
 import { logger } from './logger';
 
 const BACKUP_CRON = process.env.BACKUP_CRON;
@@ -22,19 +22,13 @@ if (BACKUP_CRON) {
 	logger.info(`Scheduling backup with cron '${BACKUP_CRON}'`);
 	schedule(BACKUP_CRON, async () => {
 		logger.info('Starting scheduled backup...');
-		return doBackup(args)
-			.then(() => doPrune(args))
-			.then(() => {
-				doListSnapshots(args);
-			});
+		return doBackup(args).then(() => doPrune(args));
 	});
 }
 
 const dryRun = async () => {
 	logger.info('Starting dry-run backup...');
-	return doBackup(['--dry-run', ...args]).then(() => {
-		doListSnapshots();
-	});
+	return doBackup(['--dry-run', ...args]);
 };
 
 dryRun();

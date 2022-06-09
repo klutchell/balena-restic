@@ -5,7 +5,6 @@ import {
 	RESTIC_ENV_VARS,
 	BIND_ROOT_PATH,
 	TMPDIR,
-	LIST_OPTS,
 	BACKUP_OPTS,
 	RESTORE_OPTS,
 	PRUNE_OPTS,
@@ -204,25 +203,6 @@ export const doPrune = async (args: string[] = []): Promise<void> => {
 	const cmd = `restic forget --prune -vv ${args.join(' ')} | cat`;
 
 	logger.info('Pruning snapshots...');
-	logger.debug(cmd);
-
-	return execSync(cmd).then(({ stdout, stderr }) => {
-		if (stdout) {
-			console.log(stdout);
-		}
-		if (stderr) {
-			console.error(stderr);
-		}
-	});
-};
-
-// https://restic.readthedocs.io/en/latest/045_working_with_repos.html#listing-all-snapshots
-export const doListSnapshots = async (args: string[] = []): Promise<void> => {
-	args = prependExtraArgs(args, LIST_OPTS).filter((f) => f !== '--dry-run');
-
-	const cmd = `restic snapshots ${args.join(' ')} | cat`;
-
-	logger.info('Listing snapshots...');
 	logger.debug(cmd);
 
 	return execSync(cmd).then(({ stdout, stderr }) => {
