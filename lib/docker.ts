@@ -25,8 +25,8 @@ export const executeInContainer = async (
 	command: string[],
 	opts: {},
 ): Promise<void> => {
-	logger.info('Running container...');
-	logger.debug(JSON.stringify(opts, null, 3));
+	logger.info('Executing in container...');
+	logger.debug(JSON.stringify(command, null, 3));
 	return (
 		docker
 			.run(image, command, process.stdout, { ...opts, Tty: true })
@@ -36,7 +36,7 @@ export const executeInContainer = async (
 				return data[1].remove();
 			})
 			.then(function (_data) {
-				logger.debug('Container removed');
+				logger.debug('Container removed.');
 			})
 			.catch(function (err) {
 				// ignore in progress and missing codes
