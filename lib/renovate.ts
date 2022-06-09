@@ -134,6 +134,16 @@ const prependExtraArgs = (args: string[], extra: string[]): string[] => {
 		extra.unshift('--dry-run');
 	}
 
+	// append one level of verbosity
+	if (logger.isInfoEnabled()) {
+		extra.unshift('-v');
+	}
+
+	// append one more level of verbosity
+	if (logger.isDebugEnabled()) {
+		extra.unshift('-v');
+	}
+
 	// give the passed-in args the highest priority by appending them last
 	return extra.concat(args);
 };
@@ -147,10 +157,18 @@ export const doBackup = async (args: string[] = []): Promise<void> => {
 
 	return getContainerOpts(self, 'ro') // read-only
 		.then(([image, opts]) => {
-			const cmd = `restic init 2>/dev/null ; restic backup ${BIND_ROOT_PATH} -vv ${args.join(
-				' ',
-			)} | cat`;
-			return executeInContainer(image, ['sh', '-c', '--', cmd], opts);
+			return executeInContainer(
+				image,
+				[
+					'sh',
+					'-c',
+					'--',
+					`restic init 2>/dev/null ; restic backup ${BIND_ROOT_PATH} ${args.join(
+						' ',
+					)} | cat`,
+				],
+				opts,
+			);
 		});
 };
 
@@ -181,10 +199,16 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 			return getContainerOpts(self, 'rw'); // read-write
 		})
 		.then(([image, opts]) => {
-			const cmd = `restic restore --target=${BIND_ROOT_PATH} -vv ${args.join(
-				' ',
-			)} | cat`;
-			return executeInContainer(image, ['sh', '-c', '--', cmd], opts);
+			return executeInContainer(
+				image,
+				[
+					'sh',
+					'-c',
+					'--',
+					`restic restore --target=${BIND_ROOT_PATH} ${args.join(' ')} | cat`,
+				],
+				opts,
+			);
 		})
 		.then(() => {
 			return fnPost();
@@ -195,7 +219,7 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 export const doPrune = async (args: string[] = []): Promise<void> => {
 	args = prependExtraArgs(args, PRUNE_OPTS);
 
-	const cmd = `restic forget --prune -vv ${args.join(' ')} | cat`;
+	const cmd = `restic forget --prune ${args.join(' ')} | cat`;
 
 	logger.info('Executing in shell...');
 	logger.debug(cmd);
