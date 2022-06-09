@@ -64,11 +64,18 @@ const getContainerOpts = async (
 	self: ContainerInspectInfo,
 	mode: 'ro' | 'rw' = 'ro',
 ): Promise<[string, {}]> => {
-	logger.info('Searching for eligible volumes...');
+	logger.info('Searching for restic volumes...');
 
-	// mounted volumes are named volumes mounted on this container that
-	// will be copied to the restic container and excluded from backups
-	const mountedVolumes = self.Mounts.filter((f) => f.Name);
+	// restic volumes for cache and snapshots are excluded from backups
+	const resticVolumes = self.Mounts.filter(
+		(f) =>
+			f.Destination === process.env.RESTIC_REPOSITORY ||
+			f.Destination === process.env.RESTIC_CACHE_DIR,
+	);
+
+	logger.debug(JSON.stringify(resticVolumes, null, 3));
+
+	logger.info('Searching for data volumes...');
 
 	// data volumes are locally discovered volumes that are not directly
 	// mount on the volume-keeper container as filtered above
@@ -76,26 +83,14 @@ const getContainerOpts = async (
 		isSupervised(self)
 			? await listVolumesFilter(supervisedFilter.bind(null, getAppId(self)))
 			: await listVolumesFilter(composedFilter.bind(null, getProjectName(self)))
-	).filter((f) => !mountedVolumes.map((m) => m.Name).includes(f.Name));
+	).filter((f) => !resticVolumes.map((m) => m.Name).includes(f.Name));
 
-	if (dataVolumes.length < 1) {
-		logger.error(
-			'No data volumes found! Check that volumes exist and have not be excluded.',
-		);
-	}
-
-	logger.debug(
-		JSON.stringify(
-			dataVolumes.map((m) => m.Name),
-			null,
-			3,
-		),
-	);
+	logger.debug(JSON.stringify(dataVolumes, null, 3));
 
 	const binds: string[] = dataVolumes
 		.map((m) => `${m.Name}:${BIND_ROOT_PATH}/${m.Name}:${mode}`)
 		.concat(
-			mountedVolumes.map(
+			resticVolumes.map(
 				(m) => `${m.Name}:${m.Destination}:${m.RW ? 'rw' : 'ro'}`,
 			),
 		);
@@ -104,6 +99,8 @@ const getContainerOpts = async (
 	const envs = RESTIC_ENV_VARS.filter((f) => process.env[f] != null).map(
 		(m) => `${m}=${process.env[m]}`,
 	);
+
+	logger.info('Configuring container...');
 
 	const opts = {
 		Env: envs,
@@ -114,6 +111,8 @@ const getContainerOpts = async (
 			Tmpfs: { [TMPDIR]: 'rw,noexec,nosuid' },
 		},
 	};
+
+	logger.debug(JSON.stringify(opts, null, 3));
 
 	return [self.Image, opts];
 };
@@ -151,8 +150,6 @@ export const doBackup = async (args: string[] = []): Promise<void> => {
 			const cmd = `restic init 2>/dev/null ; restic backup ${BIND_ROOT_PATH} -vv ${args.join(
 				' ',
 			)} | cat`;
-			logger.info('Creating snapshot...');
-			logger.debug(cmd);
 			return executeInContainer(image, ['sh', '-c', '--', cmd], opts);
 		});
 };
@@ -187,8 +184,6 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 			const cmd = `restic restore --target=${BIND_ROOT_PATH} -vv ${args.join(
 				' ',
 			)} | cat`;
-			logger.info('Restoring snapshot...');
-			logger.debug(cmd);
 			return executeInContainer(image, ['sh', '-c', '--', cmd], opts);
 		})
 		.then(() => {
@@ -202,7 +197,7 @@ export const doPrune = async (args: string[] = []): Promise<void> => {
 
 	const cmd = `restic forget --prune -vv ${args.join(' ')} | cat`;
 
-	logger.info('Pruning snapshots...');
+	logger.info('Executing in shell...');
 	logger.debug(cmd);
 
 	return execSync(cmd).then(({ stdout, stderr }) => {
