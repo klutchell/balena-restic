@@ -1,8 +1,8 @@
 {
-  "name": "volume-keeper",
+  "name": "balena-restic",
   "version": "0.0.0",
-  "description": "backup and restore application data with this balena.io snapshots block!",
-  "homepage": "https://github.com/balena-io-playground/volume-keeper",
+  "description": "Rest easy knowing that your application data volumes are automatically and securely backed up to local or cloud storage!",
+  "homepage": "https://github.com/klutchell/balena-restic",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "public": false,
@@ -14,10 +14,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/balena-io-playground/volume-keeper.git"
+    "url": "git+https://github.com/klutchell/balena-restic.git"
   },
   "bugs": {
-    "url": "https://github.com/balena-io-playground/volume-keeper/issues"
+    "url": "https://github.com/klutchell/balena-restic/issues"
   },
   "files": [
     "build/"

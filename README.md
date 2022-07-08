@@ -1,4 +1,4 @@
-# volume-keeper
+# balena-restic
 
 Rest easy knowing that your application data volumes are automatically and securely backed up to local or cloud storage!
 
@@ -17,9 +17,9 @@ To use this image, add a service in your `docker-compose.yml` file as shown belo
 ```yml
 services:
   ...
-  volume-keeper:
+  restic:
     # where <arch> is one of aarch64, armv7hf or amd64
-    image: bh.cr/gh_klutchell/volume-keeper-<arch>
+    image: bh.cr/gh_klutchell/balena-restic-<arch>
     labels:
       io.balena.features.supervisor-api: 1
       io.balena.features.balena-socket: 1
@@ -33,9 +33,9 @@ To pin to a specific version of this block use:
 ```yml
 services:
   ...
-  volume-keeper:
+  restic:
     # where <version> is the release semver or release commit ID
-    image: bh.cr/gh_klutchell/volume-keeper-<arch>/<version>
+    image: bh.cr/gh_klutchell/balena-restic-<arch>/<version>
     labels:
       io.balena.features.supervisor-api: 1
       io.balena.features.balena-socket: 1
@@ -67,7 +67,7 @@ All restic environment variables are outlined [in their documentation](https://r
 
 Backups are executed automatically on a cron schedule and will back up all local volumes by default.
 
-To backup manually you must open a shell in the `volume-keeper` service either via balena Dashboard or the balena CLI
+To backup manually you must open a shell in the `restic` service either via balena Dashboard or the balena CLI
 and execute the following command(s):
 
 ```bash
@@ -79,7 +79,7 @@ See all the available backup options here: <https://restic.readthedocs.io/en/lat
 
 ## List Snapshots
 
-To list snapshots you must open a shell in the `volume-keeper` service either via balena Dashboard or the balena CLI
+To list snapshots you must open a shell in the `restic` service either via balena Dashboard or the balena CLI
 and execute the following command(s):
 
 ```bash
@@ -91,7 +91,7 @@ See all the available filter options here: <https://restic.readthedocs.io/en/lat
 
 ### Restore
 
-To restore a snapshot you must open a shell in the `volume-keeper` service either via balena Dashboard or the balena CLI
+To restore a snapshot you must open a shell in the `restic` service either via balena Dashboard or the balena CLI
 and execute the following command(s):
 
 ```bash
@@ -105,7 +105,7 @@ See all the available restore options here: <https://restic.readthedocs.io/en/la
 
 Snapshot pruning is performed automatically after every backup following the policy in `PRUNE_OPTS`.
 
-To manually prune you must open a shell in the `volume-keeper` service either via balena Dashboard or the balena CLI
+To manually prune you must open a shell in the `restic` service either via balena Dashboard or the balena CLI
 and execute the following command(s):
 
 ```bash

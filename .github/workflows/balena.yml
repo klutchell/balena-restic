@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        fleet: [gh_klutchell/volume-keeper-amd64, gh_klutchell/volume-keeper-aarch64, gh_klutchell/volume-keeper-armv7hf]
+        fleet: [gh_klutchell/balena-restic-amd64, gh_klutchell/balena-restic-aarch64, gh_klutchell/balena-restic-armv7hf]
 
     steps:
       - uses: actions/checkout@v3
