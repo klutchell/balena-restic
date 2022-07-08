@@ -1,4 +1,4 @@
-name: volume-keeper
+name: balena-restic
 type: sw.block
 version: 0.0.8
 description: >-
@@ -8,7 +8,7 @@ assets:
   repository:
     type: blob.asset
     data:
-      url: 'https://github.com/klutchell/volume-keeper'
+      url: 'https://github.com/klutchell/balena-restic'
 data:
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:

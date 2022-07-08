@@ -78,7 +78,7 @@ const getContainerOpts = async (
 	logger.info('Searching for data volumes...');
 
 	// data volumes are locally discovered volumes that are not directly
-	// mount on the volume-keeper container as filtered above
+	// mount on the restic container as filtered above
 	const dataVolumes = (
 		isSupervised(self)
 			? await listVolumesFilter(supervisedFilter.bind(null, getAppId(self)))

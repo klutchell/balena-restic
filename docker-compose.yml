@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  volume-keeper:
+  restic:
     build: .
     labels:
       io.balena.features.supervisor-api: 1
