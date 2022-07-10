@@ -4,11 +4,10 @@ Rest easy knowing that your application data volumes are automatically and secur
 
 ## Features
 
-- supports running in "supervised" mode with balenaOS or in "standalone" mode via docker-compose
-- automatically detect local volumes in the same project namespace
+- automatically mount application volumes
 - encrypted snapshots are uploaded to your choice of local or cloud storage via [restic](https://restic.net/)
 - snapshots are automatically pruned following a configurable retention policy
-- application containers are stopped and restarted following data restore (supervised only)
+- application containers are stopped and restarted following data restore
 
 ## Usage
 
@@ -22,7 +21,6 @@ services:
     image: bh.cr/gh_klutchell/balena-restic-<arch>
     labels:
       io.balena.features.supervisor-api: 1
-      io.balena.features.balena-socket: 1
     volumes:
       - cache:/cache # recommended for performance
       - snapshots:/snapshots # only required if RESTIC_REPOSITORY is unset
@@ -38,7 +36,6 @@ services:
     image: bh.cr/gh_klutchell/balena-restic-<arch>/<version>
     labels:
       io.balena.features.supervisor-api: 1
-      io.balena.features.balena-socket: 1
     volumes:
       - cache:/cache # recommended for performance
       - snapshots:/snapshots # only required if RESTIC_REPOSITORY is unset
@@ -54,8 +51,6 @@ services:
 | `RESTIC_PASSWORD`   | Repository password for encrypted snapshots. Do not change this unless you are starting a new repository!                                                                        |
 | `BACKUP_CRON`       | Cron schedule for creating backups. See [this page](https://crontab.guru/examples.html) for examples. Default is every 8 hours.                                                  |
 | `TZ`                | The timezone in your location. Find a [list of all timezone values here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).                                          |
-| `INCLUDE_VOLUMES`   | Named volumes to include in backups. Default is all local volumes.                                                                                                               |
-| `EXCLUDE_VOLUMES`   | Named volumes to exclude from backups.                                                                                                                                           |
 | `BACKUP_OPTS`       | Extra arguments to pass to the [backup](#backup) command.                                                                                                                        |
 | `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                                                          |
 | `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                                                                      |
