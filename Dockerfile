@@ -1,7 +1,7 @@
 FROM node:16-alpine AS base
 
 # hadolint ignore=DL3018
-RUN apk add --no-cache dumb-init restic && \
+RUN apk add --no-cache dumb-init restic blkid && \
     restic self-update
 
 WORKDIR /app

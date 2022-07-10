@@ -18,24 +18,30 @@ if (process.env.BALENA_DEVICE_UUID) {
 	resticArgs.push(`--host=${process.env.BALENA_DEVICE_UUID}`);
 }
 
-const childProcess = async (cmd: string, args: string[]) => {
-	const p = spawn(cmd, args);
+const childProcess = async (cmd: string, args: string[]): Promise<string> => {
+	const child = spawn(cmd, args);
 
-	p.stdout.on('data', function (data) {
-		logger.info(data.toString());
+	let data = '';
+	for await (const chunk of child.stdout) {
+		logger.info(chunk);
+		data += chunk;
+	}
+
+	let error = '';
+	for await (const chunk of child.stderr) {
+		logger.error(chunk);
+		error += chunk;
+	}
+
+	const exitCode = await new Promise((resolve, _reject) => {
+		child.on('close', resolve);
 	});
 
-	p.stderr.on('data', function (data) {
-		logger.error(data.toString());
-	});
+	if (exitCode) {
+		throw new Error(`child process error exit ${exitCode}, ${error}`);
+	}
 
-	p.on('exit', function (code) {
-		if (code) {
-			logger.info('child process exited with code ' + code.toString());
-		} else {
-			logger.warn('child process exited');
-		}
-	});
+	return data;
 };
 
 const dryRun = async () => {
@@ -53,11 +59,11 @@ if (BACKUP_CRON) {
 
 (async () => {
 	try {
-		await childProcess('mount', [
-			'-v',
-			`$(blkid -L ${DATA_PART_LABEL})`,
-			`${BIND_ROOT_PATH}`,
-		]);
+		const dev = await (
+			await childProcess('blkid', ['-L', `${DATA_PART_LABEL}`])
+		).trim();
+		await childProcess('mkdir', ['-p', `${BIND_ROOT_PATH}`]);
+		await childProcess('mount', ['-v', `${dev}`, `${BIND_ROOT_PATH}`]);
 		await dryRun();
 	} catch (e) {
 		logger.error(e);
