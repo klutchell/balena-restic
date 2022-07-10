@@ -15,10 +15,13 @@ if (!process.env.RESTIC_CACHE_DIR) {
 	process.exit(1);
 }
 
+export const DATA_PART_LABEL = process.env.DATA_PART_LABEL || 'resin-data';
+export const BIND_ROOT_PATH = process.env.BIND_ROOT_PATH || '/data';
+
+export const BACKUP_CRON = process.env.BACKUP_CRON;
+
 export const SUPERVISOR_ADDRESS = process.env.BALENA_SUPERVISOR_ADDRESS;
 export const SUPERVISOR_API_KEY = process.env.BALENA_SUPERVISOR_API_KEY;
-
-export const BIND_ROOT_PATH = process.env.BIND_ROOT_PATH || '/data';
 
 export const TMPDIR = process.env.TMPDIR || '/tmp';
 
