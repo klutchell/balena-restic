@@ -11,8 +11,6 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       BACKUP_CRON: ""
-      # INCLUDE_VOLUMES: test-data-2
-      # EXCLUDE_VOLUMES: test-data-1
       RESTIC_PASSWORD: topsecret
       LOG_LEVEL: debug
       TAGS: foo=bar

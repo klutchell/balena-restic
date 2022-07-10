@@ -1,8 +1,8 @@
 import { schedule } from 'node-cron';
 import { doBackup, doPrune } from './renovate';
 import { logger } from './logger';
-import { spawn } from 'child_process';
-import { BACKUP_CRON, DATA_PART_LABEL, BIND_ROOT_PATH } from './config';
+import { BACKUP_CRON, DATA_PART_LABEL, DATA_MOUNT_PATH } from './config';
+import { childProcess } from './spawn';
 
 const resticArgs = ['--tag=scheduled'];
 
@@ -17,32 +17,6 @@ if (process.env.BALENA_DEVICE_NAME_AT_INIT) {
 if (process.env.BALENA_DEVICE_UUID) {
 	resticArgs.push(`--host=${process.env.BALENA_DEVICE_UUID}`);
 }
-
-const childProcess = async (cmd: string, args: string[]): Promise<string> => {
-	const child = spawn(cmd, args);
-
-	let data = '';
-	for await (const chunk of child.stdout) {
-		logger.info(chunk);
-		data += chunk;
-	}
-
-	let error = '';
-	for await (const chunk of child.stderr) {
-		logger.error(chunk);
-		error += chunk;
-	}
-
-	const exitCode = await new Promise((resolve, _reject) => {
-		child.on('close', resolve);
-	});
-
-	if (exitCode) {
-		throw new Error(`child process error exit ${exitCode}, ${error}`);
-	}
-
-	return data;
-};
 
 const dryRun = async () => {
 	logger.info('Starting dry-run backup...');
@@ -62,8 +36,8 @@ if (BACKUP_CRON) {
 		const dev = await (
 			await childProcess('blkid', ['-L', `${DATA_PART_LABEL}`])
 		).trim();
-		await childProcess('mkdir', ['-p', `${BIND_ROOT_PATH}`]);
-		await childProcess('mount', ['-v', `${dev}`, `${BIND_ROOT_PATH}`]);
+		await childProcess('mkdir', ['-p', `${DATA_MOUNT_PATH}`]);
+		await childProcess('mount', ['-v', `${dev}`, `${DATA_MOUNT_PATH}`]);
 		await dryRun();
 	} catch (e) {
 		logger.error(e);
