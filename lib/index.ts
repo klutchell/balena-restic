@@ -6,15 +6,15 @@ import { childProcess } from './spawn';
 
 const resticArgs = ['--tag=scheduled'];
 
-if (process.env.BALENA_APP_NAME) {
+if (process.env.BALENA_APP_NAME != null) {
 	resticArgs.push(`--tag=${process.env.BALENA_APP_NAME}`);
 }
 
-if (process.env.BALENA_DEVICE_NAME_AT_INIT) {
+if (process.env.BALENA_DEVICE_NAME_AT_INIT != null) {
 	resticArgs.push(`--tag=${process.env.BALENA_DEVICE_NAME_AT_INIT}`);
 }
 
-if (process.env.BALENA_DEVICE_UUID) {
+if (process.env.BALENA_DEVICE_UUID != null) {
 	resticArgs.push(`--host=${process.env.BALENA_DEVICE_UUID}`);
 }
 
