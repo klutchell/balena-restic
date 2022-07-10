@@ -32,5 +32,6 @@ ENV BACKUP_CRON "0 */8 * * *"
 ENV RESTIC_REPOSITORY "/snapshots"
 ENV RESTIC_CACHE_DIR "/cache"
 ENV RESTIC_PASSWORD "balena"
+ENV TMPDIR "/tmp"
 
 VOLUME /snapshots /cache
