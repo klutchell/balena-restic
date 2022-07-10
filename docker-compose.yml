@@ -15,3 +15,5 @@ services:
 volumes:
   cache:
   snapshots:
+  test-volume-1:
+  test-volume-2:

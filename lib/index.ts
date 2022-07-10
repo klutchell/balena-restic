@@ -33,9 +33,7 @@ if (BACKUP_CRON) {
 
 (async () => {
 	try {
-		const dev = await (
-			await childProcess('blkid', ['-L', `${DATA_PART_LABEL}`])
-		).trim();
+		const dev = await await childProcess('blkid', ['-L', `${DATA_PART_LABEL}`]);
 		await childProcess('mkdir', ['-p', `${DATA_MOUNT_PATH}`]);
 		await childProcess('mount', ['-v', `${dev}`, `${DATA_MOUNT_PATH}`]);
 		await dryRun();

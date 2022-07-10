@@ -10,13 +10,13 @@ export const childProcess = async (
 
 	let data = '';
 	for await (const chunk of child.stdout) {
-		logger.info(chunk);
+		logger.info(chunk.toString().trim());
 		data += chunk;
 	}
 
 	let error = '';
 	for await (const chunk of child.stderr) {
-		logger.error(chunk);
+		logger.error(chunk.toString().trim());
 		error += chunk;
 	}
 
@@ -28,5 +28,5 @@ export const childProcess = async (
 		throw new Error(`child process error exit ${exitCode}, ${error}`);
 	}
 
-	return data;
+	return data.trim();
 };
