@@ -16,7 +16,9 @@ if (!process.env.RESTIC_CACHE_DIR) {
 }
 
 export const DATA_PART_LABEL = process.env.DATA_PART_LABEL || 'resin-data';
-export const BIND_ROOT_PATH = process.env.BIND_ROOT_PATH || '/data';
+export const DATA_MOUNT_PATH = process.env.DATA_MOUNT_PATH || '/data';
+export const DATA_ROOT_DIR =
+	process.env.DATA_ROOT_DIR || DATA_MOUNT_PATH + '/docker/volumes';
 
 export const BACKUP_CRON = process.env.BACKUP_CRON;
 
@@ -38,11 +40,6 @@ export const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
 export const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [
 	'--group-by=hosts,tags',
 ];
-
-export const INCLUDE_VOLUMES =
-	process.env.INCLUDE_VOLUMES?.split(/[\s,;]+/) || [];
-export const EXCLUDE_VOLUMES =
-	process.env.EXCLUDE_VOLUMES?.split(/[\s,;]+/) || [];
 
 // https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables
 export const RESTIC_ENV_VARS = [

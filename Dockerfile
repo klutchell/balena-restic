@@ -29,9 +29,7 @@ CMD [ "dumb-init", "node", "/app/build/index.js" ]
 
 # default to every 8 hours
 ENV BACKUP_CRON "0 */8 * * *"
-
 ENV RESTIC_REPOSITORY "/snapshots"
 ENV RESTIC_CACHE_DIR "/cache"
-ENV TMPDIR "/tmp"
 
 VOLUME /snapshots /cache
