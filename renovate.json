@@ -1,0 +1,4 @@
+{
+	"extends": ["github>klutchell/renovate-config"],
+	"commitBody": "Change-type: patch"
+}
