@@ -22,8 +22,7 @@ services:
     labels:
       io.balena.features.supervisor-api: 1
     volumes:
-      - cache:/cache # recommended for performance
-      - snapshots:/snapshots # only required if RESTIC_REPOSITORY is unset
+      - cache:/cache
 ```
 
 To pin to a specific version of this block use:
@@ -37,8 +36,7 @@ services:
     labels:
       io.balena.features.supervisor-api: 1
     volumes:
-      - cache:/cache # recommended for performance
-      - snapshots:/snapshots # only required if RESTIC_REPOSITORY is unset
+      - cache:/cache
 ```
 
 ## Customization

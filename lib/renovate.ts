@@ -1,11 +1,4 @@
-import {
-	DATA_ROOT_DIR,
-	BACKUP_OPTS,
-	RESTORE_OPTS,
-	PRUNE_OPTS,
-	RESTIC_CACHE_DIR,
-	RESTIC_REPOSITORY,
-} from './config';
+import { DATA_ROOT_DIR, RESTIC_CACHE_DIR, RESTIC_REPOSITORY } from './config';
 import {
 	getStateStatus,
 	stopServices,
@@ -15,7 +8,23 @@ import {
 import { logger } from './logger';
 import { boolean } from 'boolean';
 import { childProcess } from './spawn';
-import { promises as fsPromises } from 'fs';
+
+const BALENA_APP_ID = process.env.BALENA_APP_ID;
+const BALENA_SERVICE_NAME = process.env.BALENA_SERVICE_NAME;
+
+const BACKUP_OPTS = process.env.BACKUP_OPTS?.split(/\s+/) || [];
+
+const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
+	'--keep-hourly=24',
+	'--keep-daily=7',
+	'--keep-weekly=5',
+	'--keep-monthly=12',
+	'--group-by=hosts,tags,path',
+];
+
+const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [
+	'--group-by=hosts,tags,path',
+];
 
 const prependExtraArgs = (args: string[], extra: string[]): string[] => {
 	// put dry-run at the front of the extra args
@@ -37,7 +46,7 @@ const prependExtraArgs = (args: string[], extra: string[]): string[] => {
 	return extra.concat(args);
 };
 
-const getExcludedVolumes = async (
+const getDataVolumes = async (
 	appId: string,
 	serviceName: string,
 ): Promise<string[]> => {
@@ -50,51 +59,37 @@ const getExcludedVolumes = async (
 		)
 		.map((m: string) => m.split(':').shift());
 
-	const eligibleVolumes = Object.values(
-		targetState.state.local.apps[appId].volumes,
-	)
+	return Object.values(targetState.state.local.apps[appId].volumes)
 		.map((m: any) => [m.appId, m.name].join('_'))
 		.filter((f) => !resticVolumes.includes(f));
-
-	const allVolumes = (
-		await fsPromises.readdir(DATA_ROOT_DIR, { withFileTypes: true })
-	)
-		.filter((dirent) => dirent.isDirectory())
-		.map((dirent) => dirent.name);
-
-	return allVolumes.filter((f) => !eligibleVolumes.includes(f));
 };
 
 // https://restic.readthedocs.io/en/latest/040_backup.html
-export const doBackup = async (args: string[] = []): Promise<string> => {
+export const doBackup = async (args: string[] = []): Promise<void> => {
 	args = prependExtraArgs(args, BACKUP_OPTS);
 
-	if (
-		process.env.BALENA_APP_ID != null &&
-		process.env.BALENA_SERVICE_NAME != null
-	) {
-		const excludeVolumes = await getExcludedVolumes(
-			process.env.BALENA_APP_ID,
-			process.env.BALENA_SERVICE_NAME,
-		);
-		args = prependExtraArgs(
-			args,
-			excludeVolumes.map(
-				(m: any) => '--exclude=' + [DATA_ROOT_DIR, m].join('/'),
-			),
-		);
+	if (BALENA_APP_ID == null) {
+		throw new Error('BALENA_APP_ID must be defined');
 	}
+
+	if (BALENA_SERVICE_NAME == null) {
+		throw new Error('BALENA_SERVICE_NAME must be defined');
+	}
+
+	const dataVolumes = await getDataVolumes(BALENA_APP_ID, BALENA_SERVICE_NAME);
 
 	return childProcess('sh', [
 		'-c',
 		'--',
 		`restic init 2>/dev/null || true`,
-	]).then(() => {
-		return childProcess('sh', [
-			'-c',
-			'--',
-			`restic backup ${DATA_ROOT_DIR} ${args.join(' ')} | cat`,
-		]);
+	]).then(async () => {
+		for (const v of dataVolumes) {
+			await childProcess('sh', [
+				'-c',
+				'--',
+				`restic backup ${[DATA_ROOT_DIR, v].join('/')} ${args.join(' ')} | cat`,
+			]);
+		}
 	});
 };
 
