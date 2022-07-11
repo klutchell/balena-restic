@@ -8,6 +8,7 @@ on:
 jobs:
   versionist:
     runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.author.name, 'versionist')"   # Ignore push events made by the service account
 
     steps:
       - uses: actions/checkout@v3
