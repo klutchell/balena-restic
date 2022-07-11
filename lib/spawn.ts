@@ -10,7 +10,7 @@ export const childProcess = async (
 
 	let data = '';
 	for await (const chunk of child.stdout) {
-		logger.info(chunk.toString().trim());
+		console.log(chunk.toString().trim());
 		data += chunk;
 	}
 
