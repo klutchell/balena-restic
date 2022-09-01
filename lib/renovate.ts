@@ -68,12 +68,20 @@ const getDataVolumes = async (
 export const doBackup = async (args: string[] = []): Promise<void> => {
 	args = prependExtraArgs(args, BACKUP_OPTS);
 
-	if (BALENA_APP_ID == null) {
-		throw new Error('BALENA_APP_ID must be defined');
+	if (!process.env.RESTIC_PASSWORD) {
+		throw new Error('RESTIC_PASSWORD is required!');
 	}
 
-	if (BALENA_SERVICE_NAME == null) {
-		throw new Error('BALENA_SERVICE_NAME must be defined');
+	if (!process.env.RESTIC_REPOSITORY) {
+		throw new Error('RESTIC_REPOSITORY is required!');
+	}
+
+	if (!BALENA_APP_ID) {
+		throw new Error('BALENA_APP_ID is required!');
+	}
+
+	if (!BALENA_SERVICE_NAME) {
+		throw new Error('BALENA_SERVICE_NAME is required!');
 	}
 
 	const dataVolumes = await getDataVolumes(BALENA_APP_ID, BALENA_SERVICE_NAME);
@@ -101,16 +109,32 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 	let fnPre = (..._args: any) => Promise.resolve();
 	let fnPost = (..._args: any) => Promise.resolve();
 
-	if (process.env.BALENA_APP_ID != null) {
-		services = await getStateStatus().then((state) =>
-			state.containers
-				.filter((f: any) => f.serviceName !== process.env.BALENA_SERVICE_NAME)
-				.map((m: any) => m.serviceName),
-		);
-
-		fnPre = stopServices.bind(null, process.env.BALENA_APP_ID, services);
-		fnPost = startServices.bind(null, process.env.BALENA_APP_ID, services);
+	if (!process.env.RESTIC_PASSWORD) {
+		throw new Error('RESTIC_PASSWORD is required!');
 	}
+
+	if (!process.env.RESTIC_REPOSITORY) {
+		throw new Error('RESTIC_REPOSITORY is required!');
+	}
+
+	if (!BALENA_APP_ID) {
+		throw new Error('BALENA_APP_ID is required!');
+	}
+
+	if (!BALENA_SERVICE_NAME) {
+		throw new Error('BALENA_SERVICE_NAME is required!');
+	}
+
+	// if (BALENA_APP_ID != null) {
+	services = await getStateStatus().then((state) =>
+		state.containers
+			.filter((f: any) => f.serviceName !== BALENA_SERVICE_NAME)
+			.map((m: any) => m.serviceName),
+	);
+
+	fnPre = stopServices.bind(null, BALENA_APP_ID, services);
+	fnPost = startServices.bind(null, BALENA_APP_ID, services);
+	// }
 
 	return fnPre()
 		.then(() => {
