@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dependency winston to v3.8.1
+      hash: 859a67dc776b49d06bcacf3ee0741d9a2a0a2fdd
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.1.2
+  title: ""
+  date: 2022-09-01T17:56:49.850Z
+- commits:
     - subject: Update dependency @types/node-cron to v3.0.3
       hash: 6af1acc20f1f55b25fc2dba30159825eefe822b0
       body: ""
