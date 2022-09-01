@@ -43,16 +43,16 @@ services:
 
 ### Environment Variables
 
-| Name                | Description                                                                                                                                                                      |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RESTIC_REPOSITORY` | [Repository](https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html) for encrypted snapshots. Defaults to `/snapshots` but cloud storage is strongly recommended! |
-| `RESTIC_PASSWORD`   | Repository password for encrypted snapshots. Do not change this unless you are starting a new repository!                                                                        |
-| `BACKUP_CRON`       | Cron schedule for creating backups. See [this page](https://crontab.guru/examples.html) for examples. Default is every 8 hours.                                                  |
-| `TZ`                | The timezone in your location. Find a [list of all timezone values here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).                                          |
-| `BACKUP_OPTS`       | Extra arguments to pass to the [backup](#backup) command.                                                                                                                        |
-| `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                                                          |
-| `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                                                                      |
-| `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                                                               |
+| Name                | Description                                                                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `RESTIC_REPOSITORY` | [Repository](https://restic.readthedocs.io/en/latest/030_preparing_a_new_repo.html) for encrypted snapshots.                            |
+| `RESTIC_PASSWORD`   | Repository password for encrypted snapshots. Set this once and avoid changing it!                                                       |
+| `BACKUP_CRON`       | Cron schedule for creating backups. See [this page](https://crontab.guru/examples.html) for examples. Default is every 8 hours.         |
+| `TZ`                | The timezone in your location. Find a [list of all timezone values here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). |
+| `BACKUP_OPTS`       | Extra arguments to pass to the [backup](#backup) command.                                                                               |
+| `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                 |
+| `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                             |
+| `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                      |
 
 All restic environment variables are outlined [in their documentation](https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables).
 
