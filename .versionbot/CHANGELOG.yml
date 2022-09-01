@@ -1,0 +1,612 @@
+- commits:
+    - subject: Exit if required env vars are unset
+      hash: 7d91f3f84e0560600fc1b33ef5edc6a3e8861592
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Build restic 0.14.0 from source
+      hash: a57b151116303872624de81dbcf4f5eb98f1ae8f
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: Update dependency node-cron to v3.0.2
+      hash: 2c8e9248e8d1fa54a1d10e2915cade290f4fdc2b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.1.0
+  title: ""
+  date: 2022-09-01T16:29:46.580Z
+- version: 2.0.3
+  date: 2022-08-24T19:46:51Z
+  commits:
+    - hash: 403f3f7d6c5ed9d1398536e570534732fc5328a8
+      author: Kyle Harding
+      footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      subject: Stub tests
+      body: null
+    - hash: b736fde1555c290047d171e8acaa4bcff47162b1
+      author: Kyle Harding
+      footers:
+        change-type: patch
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      subject: Add flowzone workflow
+      body: null
+- version: 2.0.2
+- date: 2022-07-11T16:30:37Z
+- commits:
+    - hash: 22f0bd6e744671792172601eefc3b9e86591dcab
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Use console.log for spawned child processes
+- commits:
+    - ? body
+- version: 2.0.1
+- date: 2022-07-11T16:06:29Z
+- commits:
+    - hash: e4c53374501f3c1671269ea377d90874f09c45ee
+- commits:
+    - author: Renovate Bot
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - subject: Update dependency lint-staged to v13
+- commits:
+    - ? body
+- version: 2.0.0
+- date: 2022-07-11T13:26:02Z
+- commits:
+    - hash: 95b83b1208a1338b1e2efa9009f930d742f247a5
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: "changelog: Remove partial version step"
+- commits:
+    - ? body
+- commits:
+    - hash: 27f2e0200b89d0e9d932c57cee21d9880a39ce85
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: "versionist: Revert to v0.4.6"
+- commits:
+    - ? body
+- commits:
+    - hash: ee21f57f9c927103a84091c28d95a45f45136bc5
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: "versionist: Ignore push events made by the service account"
+- commits:
+    - ? body
+- commits:
+    - hash: ef45d07961f4ae5003c305ba115530276cbed543
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: "changelog: Revert partial change"
+- commits:
+    - ? body
+- commits:
+    - hash: 1a471345f318ba23c27cc50017cfa65334d0a587
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Restore versionist for pushes to main
+- commits:
+    - ? body
+- commits:
+    - hash: 573902e4b17d43ffc30a1e9541050b7242bd3b2c
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Move renovate config to .github
+- commits:
+    - ? body
+- commits:
+    - hash: 83b4c92f40f8173bd40c8abf9bc182f20640b9d5
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: "renovate: Change extends back to config:base"
+- commits:
+    - ? body
+- commits:
+    - hash: 4d829d85422ee80dd2e47a4bd4e200ff29adbaf2
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: "workflows: Remove failing merge step"
+- commits:
+    - ? body
+- commits:
+    - hash: 2bfed032074ccab3760fa642cb88c7bd0d6bf5c1
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Restore version files to 1.0.0
+- commits:
+    - ? body
+- commits:
+    - hash: 823a0a107c890b7d97643b698c028e8d2de4a6ad
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Merge versionbot branch on PR merge
+- commits:
+    - ? body
+- commits:
+    - hash: aab20edd4a7e107bf6fe5a1e8a7513633f155fa0
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Disable versionist github action
+- commits:
+    - ? body
+- commits:
+    - hash: 1bbb3ce418b0285140c670b17aed0650f307c8cf
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Make deploy-with-balena wait for versionbot branch
+- commits:
+    - ? body
+- commits:
+    - hash: 8d4168f48da2c3ce18de59a3e440fdd6852c0574
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Add renovate config
+- commits:
+    - ? body
+- commits:
+    - hash: 3328270217887ae4d557bb8ac353e655336d5775
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: major
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Remove docker socket and use privileged for direct mounting
+- commits:
+    - ? body
+- commits:
+    - hash: 23f71fbf2eb5df5f765e4a0eda99de365685c27a
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Update versionist to use service account token
+- commits:
+    - ? body
+- commits:
+    - hash: 7e501e1c18afd726032c55d32bc0fbd64a61f206
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Mount resin-data partition on init
+- commits:
+    - ? body
+- commits:
+    - hash: d4942debc37bed81639bf2a828a3860b819e9dbb
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Revert base image to node16 to match package.json
+- commits:
+    - ? body
+- commits:
+    - hash: 0bf831d2ee4afa2f08d368686d1e3c7623fcae44
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Wait for childProcess to exit
+- commits:
+    - ? body
+- commits:
+    - hash: f5315b45a4fc1e71bee88461909c6f96403254e5
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Remove docker functions
+- commits:
+    - ? body
+- commits:
+    - hash: fc9d8d7e5d5b244300ff2741430ded20f0193544
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Remove deprecated env vars
+- commits:
+    - ? body
+- commits:
+    - hash: a985d1da72bfbeb0855848bb98eee808e595b9a6
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Exclude volumes used by restic
+- commits:
+    - ? body
+- commits:
+    - hash: eb0cdefb81ed6bddc198d6d13c80e8134ae5d79b
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Create separate backups for each volume
+- commits:
+    - ? body
+- commits:
+    - hash: 1da87bee0144346e1a136cea102cbffea35b4d48
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency typescript to v4.7.4
+- commits:
+    - ? body
+- version: 1.0.0
+- date: 2022-07-08T01:58:08Z
+- commits:
+    - hash: 9fc217587e993870a3fa515b6b664afe4c83685f
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: major
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Rename project to balena-restic
+- commits:
+    - ? body
+- commits:
+    - hash: 9455a4ae9642246c9fb5a2336a905b588ce11b5e
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Set node engine versions
+- commits:
+    - ? body
+- commits:
+    - hash: d9d0fc60d925d10158cf3d23fa8e101c573a3bdb
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency @types/node-cron to v3.0.2
+- commits:
+    - ? body
+- commits:
+    - hash: bf7db66aeba752b7e66a6f02c6af715cd4022eed
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency @types/node-fetch to v2.6.2
+- commits:
+    - ? body
+- version: 0.0.8
+- date: 2022-06-09T13:01:06Z
+- commits:
+    - hash: 02c74139026d28bf3b30875deb16b59ab81a5e5b
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Remove custom list-snapshots command
+- commits:
+    - body: This wrapper wasn't adding anything of value.
+- commits:
+    - hash: 9f4d1608aeec5115ae005d0f9ca23d6b0eb9879f
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Improve debug logging
+- commits:
+    - ? body
+- commits:
+    - hash: c9c588d1fcfa6f32344868e62b36d1ba8660e891
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Adjust restic verbosity based on LOG_LEVEL
+- commits:
+    - ? body
+- version: 0.0.7
+- date: 2022-06-08T23:09:59Z
+- commits:
+    - hash: 97689435a0476d3e8fd37d96cfd908ab93b0854a
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Replace default HOST and TAGS with balena env vars if present
+- commits:
+    - ? body
+- commits:
+    - hash: 9c986addff761c0c65cdbba54b943c557a093c95
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Cleanup logging
+- commits:
+    - ? body
+- version: 0.0.6
+- date: 2022-06-08T18:40:08Z
+- commits:
+    - hash: e1868c0d982eebe158f0d648f4b062b434822746
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Provide extra options env var for all functions
+- commits:
+    - ? body
+- commits:
+    - hash: 3cb9b6d3992f59f7c793107498dfdfd5add268ad
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency @types/mocha to v9
+- commits:
+    - ? body
+- commits:
+    - hash: 2868eb88e1f10ae30ba57578b57a07081ffaa8e8
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency @balena/lint to v6
+- commits:
+    - ? body
+- commits:
+    - hash: 5ef28ad7937376245d5564ead34adcfb80f1188f
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency typescript to v4.7.3
+- commits:
+    - ? body
+- version: 0.0.5
+- date: 2022-06-06T20:16:05Z
+- commits:
+    - hash: 6a309be33e83253b1ca16809c2a17eb0b5456a87
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Remove deprecated export
+- commits:
+    - ? body
+- commits:
+    - hash: a8758f688c4cf3e44a0ec1dace3980ba8393e7e9
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Remove deprecated @types/winston
+- commits:
+    - ? body
+- commits:
+    - hash: 9b209ffa8a587538e8fbb6262c247c4389655caf
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Update to node18
+- commits:
+    - ? body
+- version: 0.0.4
+- date: 2022-06-06T18:57:55Z
+- commits:
+    - hash: 959a9738a4ebb24aa0ccdfb81d71770b6bfdcfc0
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Default to empty tags list and clean up readme
+- commits:
+    - ? body
+- commits:
+    - hash: 1bd293bb24776f5d0029f721dcb2d9776bca4bbb
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update balena-io/deploy-to-balena-action action to v0.11.0
+- commits:
+    - ? body
+- commits:
+    - hash: 6dbea5f18f7162558e840e7bdcf5c468e33d21d3
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Update dependency @types/dockerode to v3.3.9
+- commits:
+    - ? body
+- commits:
+    - hash: 1f29a5e96438e130789532c16ced607294e921c0
+- commits:
+    - author: Renovate Bot
+- commits:
+    - subject: Pin dependencies
+- commits:
+    - ? body
+- version: 0.0.3
+- date: 2022-06-03T16:52:01Z
+- commits:
+    - hash: 1b67eedfae342c759038b8ff07b36afd3aba8172
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Separate dev and prod installation stages
+- commits:
+    - ? body
+- version: 0.0.2
+- date: 2022-06-03T14:58:09Z
+- commits:
+    - hash: a89e5ed9956cf79a2ca5ef687b5c81dc82d0f8f3
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Add balena.yml and clean up docker-compose file
+- commits:
+    - ? body
+- version: 0.0.0
+- date: 2022-06-03T14:17:18Z
+- commits:
+    - hash: 7016f2dffaae1ad55fefb73f4d9f0f13f2866063
+- commits:
+    - author: Kyle Harding
+- commits:
+    - footers:
+        signed-off-by: Kyle Harding <kyle@balena.io>
+- commits:
+    - subject: Add github actions for versionist and balena deploy
+- commits:
+    - ? body

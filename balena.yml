@@ -1,6 +1,6 @@
 name: balena-restic
 type: sw.block
-version: 2.0.3
+version: 2.1.0
 description: >-
   Rest easy knowing that your application data volumes are automatically and
   securely backed up to local or cloud storage!
