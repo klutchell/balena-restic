@@ -57,7 +57,7 @@
     "boolean": "^3.2.0",
     "node-cron": "3.0.2",
     "node-fetch": "^2.6.7",
-    "winston": "^3.7.2"
+    "winston": "3.8.1"
   },
   "engines": {
     "node": "^16.15.0",
