@@ -22,4 +22,3 @@ jobs:
         gh_klutchell/balena-restic-amd64,
         gh_klutchell/balena-restic-aarch64,
         gh_klutchell/balena-restic-armv7hf
-      npm_registry: ""
