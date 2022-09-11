@@ -22,9 +22,7 @@ const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
 	'--group-by=hosts,tags,path',
 ];
 
-const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [
-	'--group-by=hosts,tags,path',
-];
+const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [];
 
 const prependExtraArgs = (args: string[], extra: string[]): string[] => {
 	// put dry-run at the front of the extra args
@@ -141,7 +139,7 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 			return childProcess('sh', [
 				'-c',
 				'--',
-				`restic restore --target=${DATA_ROOT_DIR} ${args.join(' ')} | cat`,
+				`restic restore --target=/ ${args.join(' ')} | cat`,
 			]);
 		})
 		.then(() => {

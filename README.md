@@ -53,6 +53,7 @@ services:
 | `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                 |
 | `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                             |
 | `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                      |
+| `LOG_LEVEL`         | Control volume of logs sent to console. Default is `info`.
 
 All restic environment variables are outlined [in their documentation](https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables).
 
