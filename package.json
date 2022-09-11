@@ -1,6 +1,6 @@
 {
   "name": "balena-restic",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Rest easy knowing that your application data volumes are automatically and securely backed up to local or cloud storage!",
   "homepage": "https://github.com/klutchell/balena-restic",
   "main": "build/index.js",
@@ -64,6 +64,6 @@
     "npm": "^8.5.5"
   },
   "versionist": {
-    "publishedAt": "2022-09-01T19:23:07.269Z"
+    "publishedAt": "2022-09-11T01:51:18.217Z"
   }
 }

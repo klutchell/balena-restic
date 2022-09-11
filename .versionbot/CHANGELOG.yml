@@ -1,4 +1,18 @@
 - commits:
+    - subject: Set default restore opts to none
+      hash: e33a081c10d3975fc62b55092f5118bef4abd5a5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.1.5
+  title: ""
+  date: 2022-09-11T01:51:18.117Z
+- commits:
     - subject: Pin dependencies
       hash: 2645c6f636fdb3ab46c0e5ec4e71056649a41b0f
       body: ""
