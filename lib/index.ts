@@ -1,5 +1,5 @@
 import { schedule } from 'node-cron';
-import { doBackup, doPrune } from './renovate';
+import { doBackup, doPrune } from './restic';
 import { logger } from './logger';
 import { DATA_PART_LABEL, DATA_MOUNT_PATH } from './config';
 import { childProcess } from './spawn';
