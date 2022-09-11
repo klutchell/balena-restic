@@ -22,9 +22,7 @@ const PRUNE_OPTS = process.env.PRUNE_OPTS?.split(/\s+/) || [
 	'--group-by=hosts,tags,path',
 ];
 
-const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [
-	'--group-by=hosts,tags,path',
-];
+const RESTORE_OPTS = process.env.RESTORE_OPTS?.split(/\s+/) || [];
 
 const prependExtraArgs = (args: string[], extra: string[]): string[] => {
 	// put dry-run at the front of the extra args
