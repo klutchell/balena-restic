@@ -33,9 +33,7 @@
     "test:compose": "docker-compose -f docker-compose.test.yml up --build --exit-code-from sut ; docker-compose -f docker-compose.test.yml down -v --remove-orphans",
     "prepack": "npm run build",
     "start": "node build/index.js",
-    "backup": "node build/backup.js",
-    "restore": "node build/restore.js",
-    "prune": "node build/prune.js"
+    "backup": "node build/backup.js"
   },
   "devDependencies": {
     "@balena/lint": "6.2.0",
