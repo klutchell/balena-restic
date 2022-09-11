@@ -139,7 +139,7 @@ export const doRestore = async (args: string[] = ['latest']): Promise<void> => {
 			return childProcess('sh', [
 				'-c',
 				'--',
-				`restic restore --target=${DATA_ROOT_DIR} ${args.join(' ')} | cat`,
+				`restic restore --target=/ ${args.join(' ')} | cat`,
 			]);
 		})
 		.then(() => {
