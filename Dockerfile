@@ -18,7 +18,7 @@ RUN curl -fsSL -o restic.tar.gz \
     rm restic.tar.gz && \
     go run build.go
     
-FROM node:16-alpine AS base
+FROM node:19-alpine AS base
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache dumb-init blkid
