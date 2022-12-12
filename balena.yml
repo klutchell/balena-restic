@@ -1,9 +1,9 @@
 name: balena-restic
 type: sw.block
-version: 2.1.5
+version: 2.1.6
 description: >-
-  Rest easy knowing that your application data volumes are automatically and
-  securely backed up to local or cloud storage!
+  Rest easy knowing that your application data volumes are
+  automatically and securely backed up to local or cloud storage!
 assets:
   repository:
     type: blob.asset
