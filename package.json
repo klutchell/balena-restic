@@ -42,7 +42,7 @@
     "@types/chai": "4.3.1",
     "@types/chai-as-promised": "7.1.5",
     "@types/mocha": "10.0.1",
-    "@types/node-cron": "3.0.3",
+    "@types/node-cron": "3.0.8",
     "@types/node-fetch": "2.6.2",
     "chai": "4.3.6",
     "chai-as-promised": "7.1.1",
