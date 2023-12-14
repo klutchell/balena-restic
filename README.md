@@ -49,11 +49,10 @@ services:
 | `RESTIC_PASSWORD`   | Repository password for encrypted snapshots. Set this once and avoid changing it!                                                       |
 | `BACKUP_CRON`       | Cron schedule for creating backups. See [this page](https://crontab.guru/examples.html) for examples. Default is every 8 hours.         |
 | `TZ`                | The timezone in your location. Find a [list of all timezone values here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). |
-| `BACKUP_OPTS`       | Extra arguments to pass to the [backup](#backup) command.                                                                               |
-| `PRUNE_OPTS`        | Extra arguments to pass to the [prune](#prune) command.                                                                                 |
-| `RESTORE_OPTS`      | Extra arguments to pass to the [restore](#restore) command.                                                                             |
+| `BACKUP_OPTS`       | Extra arguments to provide to the scheduled backup action. Defaults can be found in [config.ts](./lib/config.ts).                       |
+| `PRUNE_OPTS`        | Extra arguments to provide to the scheduled prune action. Defaults can be found in [config.ts](./lib/config.ts).                        |
 | `DRY_RUN`           | Set to true to add the `--dry-run` flag to all supported commands.                                                                      |
-| `LOG_LEVEL`         | Control volume of logs sent to console. Default is `info`.
+| `LOG_LEVEL`         | Control volume of logs sent to console. Default is `info`.                                                                              |
 
 All restic environment variables are outlined [in their documentation](https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables).
 
@@ -78,7 +77,7 @@ and execute the following command(s):
 
 ```bash
 # list snapshots with optional args
-restic snapshots --group-by=hosts,tags
+restic snapshots --group-by=hosts,tags,path
 ```
 
 See all the available filter options here: <https://restic.readthedocs.io/en/latest/045_working_with_repos.html#listing-all-snapshots>
@@ -90,7 +89,7 @@ and execute the following command(s):
 
 ```bash
 # restore a specific snapshot id or 'latest'
-npm run restore 4bba301e
+restic restore 4bba301e --target=/ -v -v
 ```
 
 See all the available restore options here: <https://restic.readthedocs.io/en/latest/050_restore.html>
@@ -104,7 +103,7 @@ and execute the following command(s):
 
 ```bash
 # prune snapshots following your choice of policy
-npm run prune --keep-daily=7 --keep-weekly=5 --keep-monthly=12 --keep-yearly=75 --dry-run
+restic forget --prune --keep-daily=7 --keep-weekly=5 --keep-monthly=12 --keep-yearly=75 --dry-run
 ```
 
 See all the available prune options here: <https://restic.readthedocs.io/en/latest/060_forget.html>

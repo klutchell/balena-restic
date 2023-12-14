@@ -1,9 +1,7 @@
 import { Response } from 'node-fetch';
 import fetch from 'node-fetch';
 import { logger } from './logger';
-
-const SUPERVISOR_ADDRESS = process.env.BALENA_SUPERVISOR_ADDRESS;
-const SUPERVISOR_API_KEY = process.env.BALENA_SUPERVISOR_API_KEY;
+import { SUPERVISOR_ADDRESS, SUPERVISOR_API_KEY } from './config';
 
 class HTTPResponseError extends Error {
 	public readonly response: Response;
