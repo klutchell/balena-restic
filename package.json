@@ -38,7 +38,7 @@
     "prune": "node build/prune.js"
   },
   "devDependencies": {
-    "@balena/lint": "6.2.0",
+    "@balena/lint": "6.2.2",
     "@types/chai": "4.3.1",
     "@types/chai-as-promised": "7.1.5",
     "@types/mocha": "10.0.1",
