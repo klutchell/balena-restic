@@ -40,7 +40,7 @@
   "devDependencies": {
     "@balena/lint": "6.2.0",
     "@types/chai": "4.3.1",
-    "@types/chai-as-promised": "7.1.5",
+    "@types/chai-as-promised": "7.1.8",
     "@types/mocha": "10.0.1",
     "@types/node-cron": "3.0.3",
     "@types/node-fetch": "2.6.2",
