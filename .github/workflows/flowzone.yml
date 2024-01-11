@@ -17,7 +17,6 @@ jobs:
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       BALENA_API_KEY: ${{ secrets.BALENA_API_KEY }}
     with:
-      protect_branch: false
       balena_slugs: |
         gh_klutchell/balena-restic-amd64,
         gh_klutchell/balena-restic-aarch64,
