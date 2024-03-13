@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/golang
-FROM golang:1.19.0-alpine3.16 AS restic
+FROM golang:1.19.0-alpine3.16@sha256:0eb08c89ab1b0c638a9fe2780f7ae3ab18f6ecda2c76b908e09eb8073912045d AS restic
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache build-base curl git
@@ -18,7 +18,7 @@ RUN curl -fsSL -o restic.tar.gz \
     rm restic.tar.gz && \
     go run build.go
     
-FROM node:16-alpine AS base
+FROM node:16-alpine@sha256:a1f9d027912b58a7c75be7716c97cfbc6d3099f3a97ed84aa490be9dee20e787 AS base
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache dumb-init blkid
